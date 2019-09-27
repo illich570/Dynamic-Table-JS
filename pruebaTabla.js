@@ -6,6 +6,7 @@ var percentArray = [];
 var gananciaArray = [];
 var ganaLiberadaArray = [];
 var capitalLiberadoArray = [];
+var montoTotalArray = [];
 var plazos;
 var l;
 var totalRows;
@@ -30,6 +31,7 @@ if ( document.getElementById('monto').value != '' && document.getElementById('da
             getPercentAndMontos();
             getGananciaLiberada();
             getCapitalLiberado();
+            getMontoTotal();
             totalRows = plazos;
         }else{
             getFechas();
@@ -37,6 +39,7 @@ if ( document.getElementById('monto').value != '' && document.getElementById('da
             getPercentAndMontos();
             getGananciaLiberada();
             getCapitalLiberado();
+            getMontoTotal();
             totalRows = plazos;
         }
         var cellText;
@@ -78,8 +81,11 @@ if ( document.getElementById('monto').value != '' && document.getElementById('da
                             cellText = document.createTextNode(ganaLiberadaArray[r-1].toLocaleString());
                             break;
                         case 5:
-                            cellText = document.createTextNode(capitalLiberadoArray[r-1]);
+                            cellText = document.createTextNode(capitalLiberadoArray[r-1].toLocaleString());
                             break;
+                        case 6:
+                            cellText = document.createTextNode(montoTotalArray[r-1].toLocaleString());
+                        break;
                         default:
                             cellText = document.createTextNode("Sunshine");
                     }
@@ -194,11 +200,19 @@ function getGananciaLiberada(){
 }
 
 function getCapitalLiberado(){
+    capitalLiberadoArray = [];
     var capital = document.getElementById('monto').value;
-    var today = new Date();
-    var pru = today.getTime();
-    capitalLiberadoArray = capitales.slice();
-        if( pru < fechasDate[fechasDate.length - 1]){
-            capitalLiberadoArray[capitalLiberadoArray.length -1] = capital;// NECESITO IMPRIMIR SOLAMENTE EN EL ULTIMO ARREGLO SI LA CAPITAL SE LIBERO O NO 
+    for( var i = 0; i < capitales.length; i++){
+        capitalLiberadoArray.push("0.00");
+        if( i == capitales.length - 2){
+            capitalLiberadoArray[i] = capital;
         }
     }
+}
+
+function getMontoTotal(){
+    var capital = document.getElementById('monto').value;
+    montoTotalArray = [];
+    montoTotalArray = gananciaArray.slice();
+    montoTotalArray[montoTotalArray.length-1] = montoTotalArray[montoTotalArray.length - 1] + parseFloat(capital);
+}
