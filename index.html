@@ -2,36 +2,60 @@
 <html lang=es>
   <head>
     <meta charset="utf-8">
-    <link rel="stylesheet" href="main.css">
-    <script type="text/javascript" src="pruebaTabla.js"></script>
-    <script src="js/jq.min.js"></script>
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimun-scale=1.0>"
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/bootstrap.min.css"> 
     <title>HOLA</title>
   </head>
+
   <body>
-    <h1>Proyeccion financiera</h1>
-    <label for="monto"> Ingrese el monto a invertir</label>
-    <input id="monto"type="number" step="0.01" onchange="testTable()" placeholder="Ingrese el monto"></input>
-    <input type="text" id="date"  onchange="testTable()" placeholder="fecha aqui"></input>
-    <label for="dias">Seleccionar corte de inversion</label>
-    <select id="corte" onchange="testTable()" name="dias">
-      <option  selected disabled>Seleccione cuanto dias</option>
-      <option value="35"> 35 dias</option>
-      <option value="70"> 70 dias</option>
-      <option value="105"> 105 dias</option>
-      <option value="140">140 dias</option>
-      <option value="175"> 175 dias</option>
-      <option value="210"> 210 dias</option>
-      <option value="245">245 dias </option>
-      <option value="280">280 dias</option>
-      <option value="315">315 dias</option>
-      <option value="350">350 dias</option>
-      <option value="385"> 385 dias</option>
-      <option value="420"> 420 dias</option>
-    </select>
-    <div>
-    </div>
-    <div id="div1" style="width: 100%; background-color: orangered;">
-    </div>
-    
+      <h1 class="text-center">Proyeccion financiera</h1>
+
+      <div class="container" id="test">
+        <table id="example" class=" table table-dark table-bordered">
+          <thead>
+            <th>Fecha</th>
+            <th>C.Invertido</th>
+            <th>Ganancia Total a la f.</th>
+            <th>Capital Total a la f.</th>
+            <th>Monto total Liberado</th>
+            <th>Monto Cobrado</th>
+            <th>Plazo</th>
+            <th>Monto Invertido</th>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Hola
+                <button onclick="testex()" class="button"> //DEBO DE HACER QUE LEA UNA COLUMNA, SUME Y MUESTRE EN LA OTRA COLUMNA.
+                Touch me!
+              </button>
+            </td>
+            </tr>
+            <tr>
+              <td>1</td>
+            </tr>
+            <tr>
+              <td>2</td>
+            </tr>
+            <tr>
+              <td>3</td>
+            </tr>
+            <tr>
+              <td>4</td>
+            </tr>
+            <tr>
+              <td>5</td>
+            </tr>
+          </tbody>
+        </table>
+        <div id="container" class="container"></div>
+      </div>
+
+
+
+
+      <script src="js/jq.min.js"></script>
+      <script src="js/jsIndex.js"></script>
+      <script src="js/popper.min.js"></script>
   </body>
 </html>

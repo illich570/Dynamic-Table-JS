@@ -45,11 +45,10 @@ if ( document.getElementById('monto').value != '' && document.getElementById('da
         var cellText;
         var div1 = document.getElementById('div1');
         var tbl = document.createElement("table");
-        tbl.setAttribute("border","1");
+        div1.setAttribute("class","container");
+        tbl.setAttribute("class","table table-bordered table-dark");
         tbl.setAttribute("id","tabla");
         
-        tbl.style.backgroundColor = "cyan";
-        tbl.style.border = "1";
         for (var r = 0; r < totalRows+1 ; r++) {
             if( r == 0){
                 var head = document.createElement("thead");
@@ -164,17 +163,18 @@ function getPercentAndMontos(){
             percentArray.push( percent + '%');  
         }
     } else {
-        percent = (capital>= 10000.00 && capital<= 99999.99) ? 50 :(
-            (capital>= 100000.00 && capital<= 199999.99) ? 55 : (
-                (capital>= 200000.00 && capital<= 499999.99 ? 60 : (
-                    (capital>= 500000.00 && capital<= 999999.99) ? 65 : (
-                        (capital>= 1000000.00 && capital<= 1999999.99) ? 70 : (
-                            (capital >= 2000000.00 && capital <= 4999999.99) ? 75 : (
-                                (capital >= 5000000.00 && capital <= 9999999.99) ? 80 : (
-                                    (capital >= 10000000.00 && capital <= 49999999.99) ? 85 : (
-                                        (capital >= 50000000.00 && capital <= 99999999.99) ? 90 : (
-                                            (capital >= 100000000.00 && capital <= 199999999.99 ) ? 95 : (
-                                                (capital >= 200000000.00 && capital <= 499999999.99) ? 100 : 120)))))))))))    
+        percent = (capital <=10000.00) ? 50 :(
+            (capital>= 10000.00 && capital<= 99999.99) ? 50 :(
+                (capital>= 100000.00 && capital<= 199999.99) ? 55 : (
+                    (capital>= 200000.00 && capital<= 499999.99 ? 60 : (
+                        (capital>= 500000.00 && capital<= 999999.99) ? 65 : (
+                            (capital>= 1000000.00 && capital<= 1999999.99) ? 70 : (
+                                (capital >= 2000000.00 && capital <= 4999999.99) ? 75 : (
+                                    (capital >= 5000000.00 && capital <= 9999999.99) ? 80 : (
+                                        (capital >= 10000000.00 && capital <= 49999999.99) ? 85 : (
+                                            (capital >= 50000000.00 && capital <= 99999999.99) ? 90 : (
+                                                (capital >= 100000000.00 && capital <= 199999999.99 ) ? 95 : (
+                                                    (capital >= 200000000.00 && capital <= 499999999.99) ? 100 : 120))))))))))))    
        // FALTA FORMULA PARA CALCULAR LOS PORCENTAJES A PARTIR DE LAS INVERSIONES, HAY QUE CALCULARLA CON LAS TABLAS DE REFERENCIA
         for (let  i = 0; i < plazos; i++) {
         value = (capital * percent)/100;
@@ -203,9 +203,9 @@ function getCapitalLiberado(){
     capitalLiberadoArray = [];
     var capital = document.getElementById('monto').value;
     for( var i = 0; i < capitales.length; i++){
-        capitalLiberadoArray.push("0.00");
+        capitalLiberadoArray.push(0.00);
         if( i == capitales.length - 2){
-            capitalLiberadoArray[i] = capital;
+            capitalLiberadoArray[i] = capital + 1;
         }
     }
 }
