@@ -10,52 +10,28 @@
 
   <body>
       <h1 class="text-center">Proyeccion financiera</h1>
-
-      <div class="container" id="test">
-        <table id="example" class=" table table-dark table-bordered">
-          <thead>
-            <th>Fecha</th>
-            <th>C.Invertido</th>
-            <th>Ganancia Total a la f.</th>
-            <th>Capital Total a la f.</th>
-            <th>Monto total Liberado</th>
-            <th>Monto Cobrado</th>
-            <th>Plazo</th>
-            <th>Monto Invertido</th>
-          </thead>
-          <tbody>
-            <tr>
-              <td>Hola
-                <button onclick="testex()" class="button"> //DEBO DE HACER QUE LEA UNA COLUMNA, SUME Y MUESTRE EN LA OTRA COLUMNA.
-                Touch me!
-              </button>
-            </td>
-            </tr>
-            <tr>
-              <td>1</td>
-            </tr>
-            <tr>
-              <td>2</td>
-            </tr>
-            <tr>
-              <td>3</td>
-            </tr>
-            <tr>
-              <td>4</td>
-            </tr>
-            <tr>
-              <td>5</td>
-            </tr>
-          </tbody>
-        </table>
-        <div id="container" class="container"></div>
+      <div class="container">
+        <form>
+          <div class="form-row">
+              <div class="col">
+                  <input  id="inversion" type="number" class="form-control" placeholder="Put your money here and we will steal it">
+              </div>
+              <div class="col">
+                  <input id="fecha" type="date" class="form-control" onchange="testex()" placeholder="mete la fecha aqui guevon">
+              </div>
+          </div>
+        </form>
       </div>
+      <div class="container" id="table-resume">
+      </div>
+        <div id="tables-inv" class="container"></div>
 
 
 
 
-      <script src="js/jq.min.js"></script>
-      <script src="js/jsIndex.js"></script>
-      <script src="js/popper.min.js"></script>
+
+      <script  src="./js/jq.min.js"></script>
+      <script  src="./js/tables.js"></script>
+      <script  src="./js/popper.min.js"></script>
   </body>
 </html>
