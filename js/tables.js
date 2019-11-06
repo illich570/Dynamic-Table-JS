@@ -8,13 +8,13 @@ function testex(){
     getDates();
     drawResume();
     drawTables();
-    fillColResume();
-    fillTables();
+    fillDate();
+    fillCapital();
 }
 
 function drawTables(){
     let titleTables = ['Fecha', 'Capital Invertido', '%', 'Monto a ganar', 'Ganancia', 'Capital', 'Monto total'];
-    let divParent = document.getElementById("tables-inv");
+    let divParent = document.getElementById("div-tables");
     let idCount= 1;
     var div = divParent;
     for( var tbl = 0; tbl < 11; tbl++){
@@ -50,23 +50,20 @@ function drawTables(){
 function getDates() {
     let plazos = 14;
     let prueba = document.getElementById('fecha').value;
-    var fecha = new Date(`${prueba}`);
-    let l = fecha.setDate(fecha.getDate() + 35);
-    var fechasI = fecha;
-    fechasDate.push(fechasI.getTime());
-    fechaString.push(fechasI.toLocaleDateString());
+    let fecha = new Date(`${prueba}`);
+    fecha.setDate(fecha.getDate() + 35);
+    fechasDate.push(fecha.getTime());
+    fechaString.push(fecha.toLocaleDateString());
     for (var i = 1; i < plazos; i++) {
-    l = fecha.setDate(fecha.getDate() + 35);
-    fechasI = fecha;
-    fechasDate.push(fechasI.getTime());
-    fechaString.push(fechasI.toLocaleDateString());
+    fecha.setDate(fecha.getDate() + 35);
+    fechasDate.push(fecha.getTime());
+    fechaString.push(fecha.toLocaleDateString());
     }
 }
 
 
-
 function drawResume() {
-    let divResume = document.getElementById("table-resume");
+    let divResume = document.getElementById("div-resume");
     let titleResume = ['Fecha','Capital Inv.','Ganancia T. H. la fecha','Capital T. H. la fecha','Monto T. liberado','Monto Ret.','Plazo','Monto Inv.'];
     let tResume = document.createElement('table');
     tResume.setAttribute('class','table table-bordered table-dark mt-5');
@@ -95,19 +92,14 @@ function drawResume() {
     
 }
 
-function fillColResume(){
+
+function fillDate(){
     let resumen = document.getElementById("tableResume");// Aqui ignora totalmente la existencia de un Thead asi que la primera row es directamente correcta.
     for( let i = 0; i <= 10; i++){
         let celda = resumen.rows[i].cells[0];
         celda.textContent = fechaString[i];
-        //console.log(resumen.childElementCount);
-         //console.log(`${i}`);
-        //console.log(celda.childNodes);
     }
-}
-
-function fillTables(){
-    let divParent = document.getElementById('tables-inv');
+    let divParent = document.getElementById('div-tables');
     fill(divParent);
 }
 function fill(divParent){
@@ -123,6 +115,34 @@ function fill(divParent){
         countF = countF - 3;
     }
 }
+
+function fillCapital(){//RESOLVER PROBLEMA CON LA TOMA DE LOS DATOS de numeros
+    let tResume = document.getElementById('tableResume');
+    let tables = document.getElementById('div-tables');
+    let inputcapital = parseFloat(document.getElementById('inversion').value);
+    tResume.rows[0].cells[1].textContent = inputcapital.toLocaleString();
+    tables.firstElementChild.rows[0].cells[1].textContent = inputcapital.toLocaleString();
+    let percent = getPercent(inputcapital);
+    let r = tResume.rows[0].cells[1].textContent + 250000;
+    console.log(r);
+    }
+
+    function getPercent(num) {
+        let percent = (num <=10000.00) ? 50 :(
+            (num>= 10000.00 && num<= 99999.99) ? 50 :(
+                (num>= 100000.00 && num<= 199999.99) ? 55 : (
+                    (num>= 200000.00 && num<= 499999.99 ? 60 : (
+                        (num>= 500000.00 && num<= 999999.99) ? 65 : (
+                            (num>= 1000000.00 && num<= 1999999.99) ? 70 : (
+                                (num >= 2000000.00 && num <= 4999999.99) ? 75 : (
+                                    (num >= 5000000.00 && num <= 9999999.99) ? 80 : (
+                                        (num >= 10000000.00 && num <= 49999999.99) ? 85 : (
+                                            (num >= 50000000.00 && num <= 99999999.99) ? 90 : (
+                                                (num >= 100000000.00 && num <= 199999999.99 ) ? 95 : (
+                                                    (num >= 200000000.00 && num <= 499999999.99) ? 100 : 120))))))))))))
+        return percent;
+    }
+
 //ELEMENTOS CON NODOS
 /*function readTables(DIVPARENT){
     var tableN = divParent.firstElementChild;
@@ -137,3 +157,5 @@ function fill(divParent){
         }
     }
 }*/
+
+//<script  src="./js/popper.min.js"></script>

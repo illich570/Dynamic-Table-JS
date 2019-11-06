@@ -14,7 +14,7 @@
         <form>
           <div class="form-row">
               <div class="col">
-                  <input  id="inversion" type="number" class="form-control" placeholder="Put your money here and we will steal it">
+                  <input  id="inversion" type="number" step="0.01" class="form-control" placeholder="Put your money here and we will steal it">
               </div>
               <div class="col">
                   <input id="fecha" type="date" class="form-control" onchange="testex()" placeholder="mete la fecha aqui guevon">
@@ -22,16 +22,12 @@
           </div>
         </form>
       </div>
-      <div class="container" id="table-resume">
+      <div class="container" id="div-resume">
       </div>
-        <div id="tables-inv" class="container"></div>
-
-
-
-
+        <div id="div-tables" class="container"></div>
 
       <script  src="./js/jq.min.js"></script>
       <script  src="./js/tables.js"></script>
-      <script  src="./js/popper.min.js"></script>
+      <script src="/js/popper.min.js"></script>
   </body>
 </html>

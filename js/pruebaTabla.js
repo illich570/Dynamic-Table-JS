@@ -137,9 +137,6 @@ function getCortes(){
     return plazos;
 }
 
-
-
-
 function getPercentAndMontos(){
     var capital = document.getElementById('monto').value;
     var plazos = getCortes();
