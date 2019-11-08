@@ -3,13 +3,18 @@ var fechasDate = [];
 var fechaString = [];
 var columnas = 7;
 var totalRows= 4;
+var variablesControl = {
+  ultima: 0,
+  segunda: 0,
+  primera: 0,
+};
 
 function testex(){
     getDates();
     drawResume();
     drawTables();
     fillDate();
-    fillCapital();
+    fillCeldas();
 }
 
 function drawTables(){
@@ -35,7 +40,7 @@ function drawTables(){
                 var row = document.createElement("tr");
                 for(var c = 0; c < columnas; c++ ){
                     var cell = document.createElement("td");
-                    cell.textContent = 'HOLA';
+                    cell.textContent = '0,00';
                     row.appendChild(cell);
                     }
                     table.appendChild(row);
@@ -82,14 +87,14 @@ function drawResume() {
             let row = document.createElement("tr");
             for(let c = 0; c < columnas + 1; c++ ){
                 let cell = document.createElement("td");
-                cell.textContent = 'HOLA';
+                cell.textContent = '0,00';
                 row.appendChild(cell);
                 }
                 tResume.appendChild(row);
         }
 
     }
-    
+
 }
 
 
@@ -116,16 +121,54 @@ function fill(divParent){
     }
 }
 
-function fillCapital(){//RESOLVER PROBLEMA CON LA TOMA DE LOS DATOS de numeros
+function fillCeldas(){
+    // TOMAR VALORES DEL DOM let r = tResume.rows[0].cells[1].textContent;
+    // FORMATEAR DEL DOM A NUMEROS FLOTANTES PARA CALCULOSlet rr = formatNodeToFloat(r);
     let tResume = document.getElementById('tableResume');
     let tables = document.getElementById('div-tables');
     let inputcapital = parseFloat(document.getElementById('inversion').value);
     tResume.rows[0].cells[1].textContent = inputcapital.toLocaleString();
     tables.firstElementChild.rows[0].cells[1].textContent = inputcapital.toLocaleString();
     let percent = getPercent(inputcapital);
-    let r = tResume.rows[0].cells[1].textContent + 250000;
-    console.log(r);
+    let ganancia = (inputcapital * percent) /100;
+    tables.firstElementChild.rows[0].cells[2].textContent = percent + '%';
+    tables.firstElementChild.rows[1].cells[3].textContent = ganancia.toLocaleString();
+    var capitalDinamico;
+    for(let tablita = 0; tablita < tables.childElementCount; tablita++){
+      if( tablita == 0 ){
+        tables = tables.firstElementChild;
+        for(let r = 0; r < 4; r++){
+          console.log('Aqui va las funciones pa calcular');
+        }
+      }
+      if( tablita == 1){
+        tables = tables.nextSibling;
+        for(let r = 0; r < 4; r++){
+        capitalDinamico = document.getElementById('table1').rows[1].cells[3].textContent;
+        capitalDinamico = formatNodeToFloat(capitalDinamico);
+        tables.rows[r].cells[1].textContent = capitalDinamico;
+        }
+      }
+      if(tablita == 2){
+        console.log('hola el ultimo 1 ');
+      }
     }
+
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     function getPercent(num) {
         let percent = (num <=10000.00) ? 50 :(
@@ -141,6 +184,9 @@ function fillCapital(){//RESOLVER PROBLEMA CON LA TOMA DE LOS DATOS de numeros
                                                 (num >= 100000000.00 && num <= 199999999.99 ) ? 95 : (
                                                     (num >= 200000000.00 && num <= 499999999.99) ? 100 : 120))))))))))))
         return percent;
+    }
+    function formatNodeToFloat(num){
+        return parseFloat(num.replace(/\./g,'').replace(/\,/,'.'));
     }
 
 //ELEMENTOS CON NODOS
