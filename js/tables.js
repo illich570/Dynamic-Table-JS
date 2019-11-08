@@ -122,6 +122,10 @@ function fill(divParent){
 }
 
 function fillCeldas(){
+    var celda1;
+    var celda2;
+    var celda3;
+    var gananciaDinamica;
     // TOMAR VALORES DEL DOM let r = tResume.rows[0].cells[1].textContent;
     // FORMATEAR DEL DOM A NUMEROS FLOTANTES PARA CALCULOSlet rr = formatNodeToFloat(r);
     let tResume = document.getElementById('tableResume');
@@ -135,24 +139,30 @@ function fillCeldas(){
     tables.firstElementChild.rows[1].cells[3].textContent = ganancia.toLocaleString();
     var capitalDinamico;
     for(let tablita = 0; tablita < tables.childElementCount; tablita++){
-      if( tablita == 0 ){
-        tables = tables.firstElementChild;
-        for(let r = 0; r < 4; r++){
-          console.log('Aqui va las funciones pa calcular');
+        if( tablita == 0 ){
+            tables = tables.firstElementChild;
+            for(let r = 0; r < 4; r++){
+            console.log('Aqui va las funciones pa calcular');
         }
-      }
-      if( tablita == 1){
-        tables = tables.nextSibling;
-        for(let r = 0; r < 4; r++){
-        capitalDinamico = document.getElementById('table1').rows[1].cells[3].textContent;
-        capitalDinamico = formatNodeToFloat(capitalDinamico);
-        tables.rows[r].cells[1].textContent = capitalDinamico;
-        }
-      }
-      if(tablita == 2){
-        console.log('hola el ultimo 1 ');
-      }
     }
+        if( tablita == 1){
+            tables = tables.nextSibling;
+            tables.rows[0].cells[1].textContent = document.getElementById('table1').rows[1].cells[3].textContent;
+            celda1 = tables.rows[0].cells[1].textContent;
+            capitalDinamico = formatNodeToFloat(celda1);
+            percent = getPercent(capitalDinamico);
+            for(let r = 0; r < 4; r++){
+                gananciaDinamica = getGanancia(capitalDinamico,percent);
+                tables.rows[r].cells[2].textContent = percent + '%';
+                tables.rows[r].cells[3].textContent = gananciaDinamica.toLocaleString();
+                percent = percent + 2;
+        }
+    }
+        if(tablita == 2){
+            tables = tables.nextSibling;
+            
+    }
+}
 
 
     }
@@ -187,6 +197,9 @@ function fillCeldas(){
     }
     function formatNodeToFloat(num){
         return parseFloat(num.replace(/\./g,'').replace(/\,/,'.'));
+    }
+    function getGanancia(num1,num2){
+        return (num1 * num2)/100;
     }
 
 //ELEMENTOS CON NODOS
