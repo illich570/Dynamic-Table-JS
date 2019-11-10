@@ -4,17 +4,18 @@ var fechaString = [];
 var columnas = 7;
 var totalRows= 4;
 var variablesControl = {
-  ultima: 0,
-  segunda: 0,
-  primera: 0,
+    ultima: 1,
+    segunda: 2,
+    primera: 3,
 };
 
-function testex(){
+function testex(){  
     getDates();
     drawResume();
     drawTables();
     fillDate();
-    fillCeldas();
+    fillTables();
+    
 }
 
 function drawTables(){
@@ -23,23 +24,23 @@ function drawTables(){
     let idCount= 1;
     var div = divParent;
     for( var tbl = 0; tbl < 11; tbl++){
-        var table = document.createElement("table");
+        let table = document.createElement("table");
         table.setAttribute("class","table table-bordered table-dark mt-5");
         table.setAttribute("id",`table${idCount}`);
-        for (var r = 0; r < totalRows+1 ; r++) {
+        for (let r = 0; r < totalRows+1 ; r++) {
             if( r== 0){
-                var head = document.createElement("thead");
+                let head = document.createElement("thead");
                 for( let rHead = 0; rHead < 7; rHead++){
-                    var th = document.createElement('th');
-                    var thText= document.createTextNode(titleTables[rHead]);
+                    let th = document.createElement('th');
+                    let thText= document.createTextNode(titleTables[rHead]);
                     th.appendChild(thText);
                     head.appendChild(th);
                 }
                 table.appendChild(head);
             }else{
-                var row = document.createElement("tr");
-                for(var c = 0; c < columnas; c++ ){
-                    var cell = document.createElement("td");
+                let row = document.createElement("tr");
+                for(let c = 0; c < columnas; c++ ){
+                    let cell = document.createElement("td");
                     cell.textContent = '0,00';
                     row.appendChild(cell);
                     }
@@ -50,7 +51,6 @@ function drawTables(){
         idCount++;
     }
 }
-
 
 function getDates() {
     let plazos = 14;
@@ -65,7 +65,6 @@ function getDates() {
     fechaString.push(fecha.toLocaleDateString());
     }
 }
-
 
 function drawResume() {
     let divResume = document.getElementById("div-resume");
@@ -99,7 +98,7 @@ function drawResume() {
 
 
 function fillDate(){
-    let resumen = document.getElementById("tableResume");// Aqui ignora totalmente la existencia de un Thead asi que la primera row es directamente correcta.
+    let resumen = document.getElementById("tableResume");
     for( let i = 0; i <= 10; i++){
         let celda = resumen.rows[i].cells[0];
         celda.textContent = fechaString[i];
@@ -121,56 +120,145 @@ function fill(divParent){
     }
 }
 
-function fillCeldas(){
+function fillTables(){
+    var last;
+    var total;
     var celda1;
+    var percent;
     var celda2;
     var celda3;
     var gananciaDinamica;
-    // TOMAR VALORES DEL DOM let r = tResume.rows[0].cells[1].textContent;
-    // FORMATEAR DEL DOM A NUMEROS FLOTANTES PARA CALCULOSlet rr = formatNodeToFloat(r);
+    var capitalDinamico;
     let tResume = document.getElementById('tableResume');
     let tables = document.getElementById('div-tables');
     let inputcapital = parseFloat(document.getElementById('inversion').value);
-    tResume.rows[0].cells[1].textContent = inputcapital.toLocaleString();
-    tables.firstElementChild.rows[0].cells[1].textContent = inputcapital.toLocaleString();
-    let percent = getPercent(inputcapital);
-    let ganancia = (inputcapital * percent) /100;
-    tables.firstElementChild.rows[0].cells[2].textContent = percent + '%';
-    tables.firstElementChild.rows[1].cells[3].textContent = ganancia.toLocaleString();
-    var capitalDinamico;
-    for(let tablita = 0; tablita < tables.childElementCount; tablita++){
+
+    for(let tablita = 0; tablita < 11; tablita++){
+
         if( tablita == 0 ){
             tables = tables.firstElementChild;
+            percent = getPercent(inputcapital);
             for(let r = 0; r < 4; r++){
-            console.log('Aqui va las funciones pa calcular');
+            tables.rows[r].cells[1].textContent = inputcapital.toLocaleString();
+            gananciaDinamica = getGanancia(inputcapital,percent);
+            r ==3 ? last = gananciaDinamica : false;
+            tables.rows[r].cells[2].textContent = percent + '%';
+            tables.rows[r].cells[3].textContent = gananciaDinamica.toLocaleString();
+            percent = percent + 2;
+            tables.rows[r].cells[6].textContent = gananciaDinamica.toLocaleString();
+            }
+            total = inputcapital +last;
+            tables.rows[3].cells[6].textContent = total.toLocaleString();
+            percent = getElementContent(1,1,3);
+            console.log(percent);
         }
-    }
         if( tablita == 1){
             tables = tables.nextSibling;
-            tables.rows[0].cells[1].textContent = document.getElementById('table1').rows[1].cells[3].textContent;
-            celda1 = tables.rows[0].cells[1].textContent;
+            celda1 = getElementContent(1,1,3);
             capitalDinamico = formatNodeToFloat(celda1);
             percent = getPercent(capitalDinamico);
             for(let r = 0; r < 4; r++){
+                tables.rows[r].cells[1].textContent = capitalDinamico.toLocaleString();
+                gananciaDinamica = getGanancia(capitalDinamico,percent);
+                tables.rows[r].cells[2].textContent = percent + '%';
+                tables.rows[r].cells[3].textContent = gananciaDinamica.toLocaleString();
+                tables.rows[r].cells[6].textContent = gananciaDinamica.toLocaleString();
+                percent = percent + 2;
+                r == 3 ? last = gananciaDinamica : false;
+            }
+            total = capitalDinamico + last;
+            tables.rows[3].cells[6].textContent = total.toLocaleString();
+        }
+        if(tablita == 2){
+            tables = tables.nextSibling;
+            celda1 = getElementContent(1,2,3);
+            celda2 = getElementContent(2,1,3);
+            console.log(celda1,celda2);
+            capitalDinamico = formatNodeToFloat(celda1) + formatNodeToFloat(celda2);
+            console.log(capitalDinamico);
+            percent = getPercent(capitalDinamico);
+            for(let r = 0; r<4; r++){
+                tables.rows[r].cells[1].textContent = capitalDinamico.toLocaleString();
                 gananciaDinamica = getGanancia(capitalDinamico,percent);
                 tables.rows[r].cells[2].textContent = percent + '%';
                 tables.rows[r].cells[3].textContent = gananciaDinamica.toLocaleString();
                 percent = percent + 2;
+                r == 3 ? last = gananciaDinamica : false;
+                tables.rows[r].cells[6].textContent = gananciaDinamica.toLocaleString();
+            }
+            total = capitalDinamico + last;
+            tables.rows[3].cells[6].textContent = total.toLocaleString();
+        }
+        if(tablita > 2){
+            tables = tables.nextSibling;
+            celda1 = getElementContent(variablesControl.ultima,3,6);
+            celda2 = getElementContent(variablesControl.segunda,2,3);
+            celda3 = getElementContent(variablesControl.primera,1,3);
+            console.log(celda1,celda2,celda3);
+            capitalDinamico = formatNodeToFloat(celda1) + formatNodeToFloat(celda2)+ formatNodeToFloat(celda3);
+            console.log(capitalDinamico);
+            percent = getPercent(capitalDinamico);
+            for(let r = 0; r<4; r++){
+                tables.rows[r].cells[1].textContent = capitalDinamico.toLocaleString();
+                gananciaDinamica = getGanancia(capitalDinamico,percent);
+                tables.rows[r].cells[2].textContent = percent + '%';
+                tables.rows[r].cells[3].textContent = gananciaDinamica.toLocaleString();
+                percent = percent + 2;
+                r == 3 ? last = gananciaDinamica : false;
+                tables.rows[r].cells[6].textContent = gananciaDinamica.toLocaleString();
+            }
+            total = capitalDinamico + last;
+            tables.rows[3].cells[6].textContent = total.toLocaleString();
+            variablesControl.ultima++;
+            variablesControl.segunda++;
+            variablesControl.primera++;
         }
     }
-        if(tablita == 2){
-            tables = tables.nextSibling;
-            
-    }
+    fillResumen(tResume);
 }
 
-
+function fillResumen(resumen){
+    variablesControl.ultima = 1;
+    variablesControl.segunda = 2;
+    variablesControl.primera = 3;
+    let indexTablaCapital = 1;
+    let celda1;
+    let celda2;
+    let celda3;
+    let gananciaDinamica;
+    for(let r = 1; r<11; r++){
+        if(r == 0){
+            resumen.rows[r].cells[2].textContent = getElementContent(1,1,3);
+        }
+        if(r == 1){
+            celda1 = getElementContent(1,1,3);
+            celda2 = getElementContent(2,0,3);
+            gananciaDinamica = formatNodeToFloat(celda1) + formatNodeToFloat (celda2);
+            resumen.rows[r].cells[2].textContent = gananciaDinamica.toLocaleString();
+        }else{
+            celda1 = getElementContent(variablesControl.ultima,3,3);
+            celda2 = getElementContent(variablesControl.segunda,2,3);
+            celda3 = getElementContent(variablesControl.primera,1,3);
+            if(r >= 3){
+                resumen.rows[r].cells[3].textContent = getElementContent(indexTablaCapital,0,1);
+                indexTablaCapital++;
+            }
+            gananciaDinamica = formatNodeToFloat(celda1) + formatNodeToFloat(celda2) + formatNodeToFloat(celda3);
+            resumen.rows[r].cells[2].textContent = gananciaDinamica.toLocaleString();
+            variablesControl.ultima++;
+            variablesControl.segunda++;
+            variablesControl.primera++;
+            
+        }
+        resumen.rows[r].cells[6].textContent = '105';
     }
+};
 
 
 
 
-
+    // TOMAR VALORES DEL DOM let r = tResume.rows[0].cells[1].textContent;
+    // FORMATEAR DEL DOM A NUMEROS FLOTANTES PARA CALCULOSlet rr = formatNodeToFloat(r);
 
 
 
@@ -195,13 +283,18 @@ function fillCeldas(){
                                                     (num >= 200000000.00 && num <= 499999999.99) ? 100 : 120))))))))))))
         return percent;
     }
+
     function formatNodeToFloat(num){
-        return parseFloat(num.replace(/\./g,'').replace(/\,/,'.'));
+        return parseFloat(num.replace(/\./g,'').replace(/,/,'.'));
     }
+
     function getGanancia(num1,num2){
         return (num1 * num2)/100;
     }
 
+    function getElementContent(id,row,cell){
+        return document.getElementById(`table${id}`).rows[row].cells[cell].textContent;
+    }
 //ELEMENTOS CON NODOS
 /*function readTables(DIVPARENT){
     var tableN = divParent.firstElementChild;
@@ -216,5 +309,3 @@ function fillCeldas(){
         }
     }
 }*/
-
-//<script  src="./js/popper.min.js"></script>
