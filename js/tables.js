@@ -217,7 +217,7 @@ function fillTables(){
     fillResumen(tResume);
 }
 
-function fillResumen(resumen){
+function fillResumen(resumen){ //RESOLVER PROBLEMA PARA CALCULAR GANANCIA TOTAL A LA FECHA, CALCULAR MONTO INVERTIDO, REFACTORIZAR FUNCIONES.
     variablesControl.ultima = 1;
     variablesControl.segunda = 2;
     variablesControl.primera = 3;
@@ -226,15 +226,23 @@ function fillResumen(resumen){
     let celda2;
     let celda3;
     let gananciaDinamica;
+    let montoTotal;
     for(let r = 1; r<11; r++){
         if(r == 0){
             resumen.rows[r].cells[2].textContent = getElementContent(1,1,3);
+            resumen.rows[r].cells[4].textContent = getElementContent(1,1,3);
         }
         if(r == 1){
             celda1 = getElementContent(1,1,3);
             celda2 = getElementContent(2,0,3);
             gananciaDinamica = formatNodeToFloat(celda1) + formatNodeToFloat (celda2);
             resumen.rows[r].cells[2].textContent = gananciaDinamica.toLocaleString();
+            celda1 = resumen.rows[r].cells[2].textContent;
+            celda2 = resumen.rows[r].cells[3].textContent;
+            montoTotal = formatNodeToFloat(celda1) + formatNodeToFloat(celda2);
+            resumen.rows[r].cells[4].textContent = montoTotal.toLocaleString();
+            
+            
         }else{
             celda1 = getElementContent(variablesControl.ultima,3,3);
             celda2 = getElementContent(variablesControl.segunda,2,3);
@@ -245,6 +253,10 @@ function fillResumen(resumen){
             }
             gananciaDinamica = formatNodeToFloat(celda1) + formatNodeToFloat(celda2) + formatNodeToFloat(celda3);
             resumen.rows[r].cells[2].textContent = gananciaDinamica.toLocaleString();
+            celda1 = resumen.rows[r].cells[2].textContent;
+            celda2 = resumen.rows[r].cells[3].textContent;
+            montoTotal = formatNodeToFloat(celda1) + formatNodeToFloat(celda2);
+            resumen.rows[r].cells[4].textContent = montoTotal.toLocaleString();
             variablesControl.ultima++;
             variablesControl.segunda++;
             variablesControl.primera++;
