@@ -16,6 +16,18 @@ function testex(){
     RellenarCeldaFechas();
     fillTables();
 }
+function hola(id){
+    let resumen = document.getElementById('tablaResumen');
+    let val = document.getElementById(id);
+    let celda1 = formatNodeToFloat(val.value);
+    val.value = celda1.toLocaleString();
+    let celda2 = formatNodeToFloat(resumen.rows[id -1].cells[6].textContent);
+    let montoInvertido = celda2 - celda1;
+    resumen.rows[id-1].cells[6].textContent = montoInvertido.toLocaleString();
+    celda2 = formatNodeToFloat(resumen.rows[id - 1].cells[1].textContent);
+    let capitalInvertido = celda2 - celda1;
+    resumen.rows[id - 1].cells[1].textContent = capitalInvertido.toLocaleString();
+}
 
 function DibujarTablas(){
     let titleTables = ['Fecha', 'Capital Invertido', '%', 'Monto a ganar', 'Ganancia', 'Capital', 'Monto total'];
@@ -65,12 +77,14 @@ function getFechas() {
 }
 
 function DibujarTablaResumen() {
+    var indexInput = 0;
     let divTablaResumen = document.getElementById("div-resume");
     let titulosTResumen = ['Fecha','Capital Inv.','Ganancia T. H. la fecha','Capital T. H. la fecha','Monto T. liberado','Monto Ret.','Plazo','Monto Inv.'];
     let tablaResumen = document.createElement('table');
     tablaResumen.setAttribute('class','table table-bordered table-dark mt-5');
     tablaResumen.setAttribute('id','tablaResumen');
     for( let indexRow = 0; indexRow < 12; indexRow++){
+        
         if(indexRow == 0) {
             var head  = tablaResumen.createTHead();
             for( let rHead = 0; rHead <= 7; rHead++){
@@ -83,12 +97,23 @@ function DibujarTablaResumen() {
         }else{
             let row = document.createElement("tr");
             for(let celda = 0; celda <= columnas; celda++ ){
+                if(celda != 5){
                 let cell = document.createElement("td");
                 cell.textContent = '0,00';
                 row.appendChild(cell);
+                }else{
+                    let input = document.createElement("input");
+                    input.setAttribute("id",`${indexInput}`);
+                    input.setAttribute('placeholder',"0,00");
+                    input.setAttribute('style','width: 120px;');
+                    input.setAttribute('onblur',`hola(${indexInput})`);
+                    row.appendChild(input);
+                    
                 }
+            }
                 tablaResumen.appendChild(row);
         }
+        indexInput++;
     }
 }
 
@@ -116,7 +141,8 @@ function rellenarFechasTablas(divTablas){
     }
 }
 
-function fillTables(){
+function fillTables(index = 0){
+    var indexTabla = index;
     var ultimaGanancia;
     var montoTotal;
     var celda1;
@@ -129,7 +155,7 @@ function fillTables(){
     let tablas = document.getElementById('div-tables');
     let inputcapital = parseFloat(document.getElementById('inversion').value);
 
-    for(let indexTabla = 0; indexTabla < 11; indexTabla++){
+    for(indexTabla; indexTabla < 11; indexTabla++){
 
         if( indexTabla == 0 ){
             tablas = tablas.firstElementChild; // EQUIVALE A LA TABLA 1
@@ -266,15 +292,15 @@ function fillResumen(resumen){ //RESOLVER PROBLEMA PARA CALCULAR CAPITAL INVERTI
             celda2 = resumen.rows[indexRow].cells[3].textContent;
             montoTotal = formatNodeToFloat(celda1) + formatNodeToFloat(celda2);
             resumen.rows[indexRow].cells[4].textContent = montoTotal.toLocaleString(); // RELLENA MONTO TOTAL LIBERADO
-            resumen.rows[indexRow].cells[7].textContent = montoTotal.toLocaleString(); // RELLENA MONTO INVERTIDO
+            resumen.rows[indexRow].cells[6].textContent = montoTotal.toLocaleString(); // RELLENA MONTO INVERTIDO
             variablesControl.ultima++;
             variablesControl.segunda++;
             variablesControl.primera++;
             
         }
-        resumen.rows[indexRow].cells[6].textContent = '105'; //ESTO RELLENA EL ESPACIO DE PLAZO
+        resumen.rows[indexRow].cells[5].textContent = '105'; //ESTO RELLENA EL ESPACIO DE PLAZO
     }
-};
+}
 
 
 
