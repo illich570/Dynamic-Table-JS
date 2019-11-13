@@ -1,3 +1,26 @@
-#div1{
-    margin-top: 1.5%;
+
+#div-resume{
+    width: 60%;
+    float: left;
+}
+thead{
+    font-size: 0.95em;
+}
+#div-tables{
+    width: 38%;
+    float: right;
+}
+
+#div-tables > table {
+    position: absolute;
+    width: 350px;
+}
+input{
+    background: wheat;
+    text-align: center;
+}
+nav {
+    position: absolute;
+    top: 430px;
+    left: 1100px;
 }

@@ -16,9 +16,10 @@ function testex(){
     RellenarCeldaFechas();
     fillTables();
 }
-function hola(id){
+function retiroResumen(id){
     let resumen = document.getElementById('tablaResumen');
     let val = document.getElementById(id);
+    console.log(id);
     let celda1 = formatNodeToFloat(val.value);
     val.value = celda1.toLocaleString();
     let celda2 = formatNodeToFloat(resumen.rows[id -1].cells[6].textContent);
@@ -27,10 +28,11 @@ function hola(id){
     celda2 = formatNodeToFloat(resumen.rows[id - 1].cells[1].textContent);
     let capitalInvertido = celda2 - celda1;
     resumen.rows[id - 1].cells[1].textContent = capitalInvertido.toLocaleString();
+
 }
 
 function DibujarTablas(){
-    let titleTables = ['Fecha', 'Capital Invertido', '%', 'Monto a ganar', 'Ganancia', 'Capital', 'Monto total'];
+    let titleTables = ['Fecha', 'Capital Inv.', '%', 'Monto ganar', 'Ganancia', 'Capital', 'Monto'];
     let divParent = document.getElementById("div-tables");
     let idAtributoTabla= 1;
     var div = divParent;
@@ -106,7 +108,7 @@ function DibujarTablaResumen() {
                     input.setAttribute("id",`${indexInput}`);
                     input.setAttribute('placeholder',"0,00");
                     input.setAttribute('style','width: 120px;');
-                    input.setAttribute('onblur',`hola(${indexInput})`);
+                    input.setAttribute('onblur',`retiroResumen(${indexInput})`);
                     row.appendChild(input);
                     
                 }
@@ -141,8 +143,9 @@ function rellenarFechasTablas(divTablas){
     }
 }
 
-function fillTables(index = 0){
+function fillTables(index = 0,montoInvertido = 0){
     var indexTabla = index;
+    console.log(indexTabla);
     var ultimaGanancia;
     var montoTotal;
     var celda1;
@@ -171,7 +174,7 @@ function fillTables(index = 0){
             tablas.rows[indexRow].cells[6].textContent = gananciaDinamica.toLocaleString();// INSERTA LA GANANCIA EN LA COLUMNA MONTO TOTAL
             porcentaje = porcentaje + 2;
             }
-            montoTotal = inputcapital +ultimaGanancia;
+            montoTotal = inputcapital + ultimaGanancia;
             tablas.rows[3].cells[6].textContent = montoTotal.toLocaleString();
             porcentaje = getElementContent(1,1,3);
         }
@@ -269,7 +272,8 @@ function fillResumen(resumen){ //RESOLVER PROBLEMA PARA CALCULAR CAPITAL INVERTI
             celda1 = resumen.rows[indexRow].cells[2].textContent;
             celda2 = resumen.rows[indexRow].cells[3].textContent;
             montoTotal = formatNodeToFloat(celda1) + formatNodeToFloat(celda2);
-            resumen.rows[indexRow].cells[4].textContent = montoTotal.toLocaleString(); // RELLENA MONTO TOTAL LIBERADO
+            resumen.rows[indexRow].cells[4].textContent = montoTotal.toLocaleString();
+            resumen.rows[indexRow].cells[6].textContent = montoTotal.toLocaleString(); // RELLENA MONTO TOTAL LIBERADO
             
             
         }else{
