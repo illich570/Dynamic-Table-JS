@@ -8,27 +8,37 @@ var variablesControl = {
     segunda: 2,
     primera: 3,
 };
-// HACER INDEPENDIENTE LA FECHA DESPUES DE HABERSE CREADO LA TABLA SOLO ACTUALIZAR LA COLUMNA DE FECHAS
-function testex(){  
+var first = true;
+
+function testex(){
+    if(first == true){  
     getFechas();
     DibujarTablaResumen();
     DibujarTablas();
     RellenarCeldaFechas();
     fillTables();
+    first = false;
+    }else{
+        fechaString = [];
+        fechasDate = [];
+        getFechas();
+        RellenarCeldaFechas()
+    }
 }
 function retiroResumen(id){
-    let resumen = document.getElementById('tablaResumen');
-    let val = document.getElementById(id);
-    console.log(id);
-    let celda1 = formatNodeToFloat(val.value);
-    val.value = celda1.toLocaleString();
-    let celda2 = formatNodeToFloat(resumen.rows[id -1].cells[6].textContent);
-    let montoInvertido = celda2 - celda1;
-    resumen.rows[id-1].cells[6].textContent = montoInvertido.toLocaleString();
-    celda2 = formatNodeToFloat(resumen.rows[id - 1].cells[1].textContent);
-    let capitalInvertido = celda2 - celda1;
-    resumen.rows[id - 1].cells[1].textContent = capitalInvertido.toLocaleString();
-
+    if( document.getElementById(id).value != 0){
+        let resumen = document.getElementById('tablaResumen');
+        let val = document.getElementById(id);
+        let celda1 = formatNodeToFloat(val.value);
+        val.value = celda1.toLocaleString();
+        let celda2 = formatNodeToFloat(resumen.rows[id -1].cells[6].textContent);
+        let montoInvertido = celda2 - celda1;
+        resumen.rows[id - 1].cells[6].textContent = montoInvertido.toLocaleString();
+        celda2 = formatNodeToFloat(resumen.rows[id - 1].cells[1].textContent);
+        let capitalInvertido = celda2 - celda1;
+        resumen.rows[id - 1].cells[1].textContent = capitalInvertido.toLocaleString();
+        fillTables(id,montoInvertido,true);
+    }
 }
 
 function DibujarTablas(){
@@ -68,6 +78,9 @@ function DibujarTablas(){
 function getFechas() {
     let plazos = 14;
     let fecha = new Date(`${document.getElementById('fecha').value}`);
+    fecha.setDate(fecha.getDate() + 1);
+    fechasDate.push(fecha.getTime());
+    fechaString.push(fecha.toLocaleDateString());
     fecha.setDate(fecha.getDate() + 35);
     fechasDate.push(fecha.getTime());
     fechaString.push(fecha.toLocaleDateString());
@@ -76,6 +89,7 @@ function getFechas() {
     fechasDate.push(fecha.getTime());
     fechaString.push(fecha.toLocaleDateString());
     }
+    console.log(fechaString);
 }
 
 function DibujarTablaResumen() {
@@ -143,25 +157,28 @@ function rellenarFechasTablas(divTablas){
     }
 }
 
-function fillTables(index = 0,montoInvertido = 0){
-    var indexTabla = index;
-    console.log(indexTabla);
-    var ultimaGanancia;
-    var montoTotal;
-    var celda1;
-    var porcentaje;
-    var celda2;
-    var celda3;
-    var gananciaDinamica;
-    var capitalDinamico;
-    let tablaResumen = document.getElementById('tablaResumen');
+function fillTables(index = 0, capitalModificado = 0, restar = false){
+    let indexTabla;
+    index == 0 ?  indexTabla = 0 : indexTabla = index -1;
+    variablesControl.ultima = 1;
+    variablesControl.segunda = 2;
+    variablesControl.primera = 3;
+    let control= restar;
+    var ultimaGanancia = 0;
+    var montoTotal = 0;
+    let celda1 = 0;
+    var porcentaje = 0;
+    let celda2 = 0;
+    let celda3 = 0;
+    let gananciaDinamica = 0;
+    var capitalDinamico = 0;
     let tablas = document.getElementById('div-tables');
+    tablas = tablas.firstElementChild;
     let inputcapital = parseFloat(document.getElementById('inversion').value);
 
     for(indexTabla; indexTabla < 11; indexTabla++){
 
-        if( indexTabla == 0 ){
-            tablas = tablas.firstElementChild; // EQUIVALE A LA TABLA 1
+        if( indexTabla == 0 ){ // EQUIVALE A LA TABLA 1
             porcentaje = getPorcentaje(inputcapital);
             tablas.rows[0].cells[1].textContent = inputcapital.toLocaleString(); //INSERTA LA CAPITAL EN LA FILA 0
             tablas.rows[0].cells[2].textContent = porcentaje + '%';  //INSERTA EL PORCENTAJE EN LA FILA 0
@@ -179,16 +196,21 @@ function fillTables(index = 0,montoInvertido = 0){
             porcentaje = getElementContent(1,1,3);
         }
         if( indexTabla == 1){
-            tablas = tablas.nextSibling;
+            tablas = reiniciarTabla(indexTabla + 1);
             celda1 = getElementContent(1,1,3);
             capitalDinamico = formatNodeToFloat(celda1);
+            if(control === true){
+                capitalDinamico = capitalModificado;
+                variablesControl = reiniciarVariables(variablesControl);
+                control = !control;
+            }
             porcentaje = getPorcentaje(capitalDinamico);
             tablas.rows[0].cells[1].textContent = capitalDinamico.toLocaleString();//INSERTA LA CAPITAL EN LA FILA 0
             tablas.rows[0].cells[2].textContent = porcentaje + '%';//INSERTA EL PORCENTAJE EN LA FILA 0
             for(let indexRow = 1; indexRow < 4; indexRow++){
                 tablas.rows[indexRow].cells[1].textContent = capitalDinamico.toLocaleString();
-                gananciaDinamica = getGanancia(capitalDinamico,porcentaje);// CALCULA LA GANANCIA CON EL CAPITAL Y EL POCENTAJE QUE AUMENTA DE 2% CADA CICLO
-                tablas.rows[indexRow].cells[2].textContent = porcentaje + '%';
+                gananciaDinamica = getGanancia(capitalDinamico,porcentaje);
+                tablas.rows[indexRow].cells[2].textContent = porcentaje + '%'; // CALCULA LA GANANCIA CON EL CAPITAL Y EL POCENTAJE QUE AUMENTA DE 2% CADA CICLO
                 tablas.rows[indexRow].cells[3].textContent = gananciaDinamica.toLocaleString();//INSSERTA LA GANANCIA EN LAS FILAS
                 tablas.rows[indexRow].cells[6].textContent = gananciaDinamica.toLocaleString();//inserta la ganancia en la columna monto total
                 porcentaje = porcentaje + 2;
@@ -198,10 +220,15 @@ function fillTables(index = 0,montoInvertido = 0){
             tablas.rows[3].cells[6].textContent = montoTotal.toLocaleString(); // Rellena el Ultimo monto en Monto montoTotal
         }
         if(indexTabla == 2){
-            tablas = tablas.nextSibling;
+            tablas = reiniciarTabla(indexTabla + 1);
             celda1 = getElementContent(1,2,3);
             celda2 = getElementContent(2,1,3);
             capitalDinamico = formatNodeToFloat(celda1) + formatNodeToFloat(celda2);
+            if(control === true){
+                capitalDinamico = capitalModificado;
+                control = !control;
+                variablesControl = reiniciarVariables(variablesControl);
+            }
             porcentaje = getPorcentaje(capitalDinamico);
             tablas.rows[0].cells[1].textContent = capitalDinamico.toLocaleString();//INSERTA LA CAPITAL EN LA FILA 0
             tablas.rows[0].cells[2].textContent = porcentaje + '%';//INSERTA EL PORCENTAJE EN LA FILA 0
@@ -212,16 +239,22 @@ function fillTables(index = 0,montoInvertido = 0){
                 tablas.rows[indexRow].cells[3].textContent = gananciaDinamica.toLocaleString();//INSSERTA LA GANANCIA EN LAS FILAS
                 indexRow == 3 ? ultimaGanancia = gananciaDinamica : false;//Atajar el ultimo valor
                 tablas.rows[indexRow].cells[6].textContent = gananciaDinamica.toLocaleString();//INSSERTA LA GANANCIA EN LA COLUMNA MONTO TOTAL
+                porcentaje += 2;
             }
             montoTotal = capitalDinamico + ultimaGanancia;
             tablas.rows[3].cells[6].textContent = montoTotal.toLocaleString();// Rellena el Ultimo monto en Monto montoTotal
         }
-        if(indexTabla > 2){
-            tablas = tablas.nextSibling;
+        if(indexTabla >2) {
+            tablas = reiniciarTabla(indexTabla + 1);
             celda1 = getElementContent(variablesControl.ultima,3,6);
             celda2 = getElementContent(variablesControl.segunda,2,3);
             celda3 = getElementContent(variablesControl.primera,1,3);
             capitalDinamico = formatNodeToFloat(celda1) + formatNodeToFloat(celda2)+ formatNodeToFloat(celda3);
+            if(control === true){
+                capitalDinamico = capitalModificado;
+                variablesControl = reiniciarVariables(variablesControl,indexTabla);
+                control = !control;
+            }
             porcentaje = getPorcentaje(capitalDinamico);
             tablas.rows[0].cells[1].textContent = capitalDinamico.toLocaleString();//INSERTA LA CAPITAL EN LA FILA 0
             tablas.rows[0].cells[2].textContent = porcentaje + '%';//INSERTA EL PORCENTAJE EN LA FILA 0
@@ -241,25 +274,25 @@ function fillTables(index = 0,montoInvertido = 0){
             variablesControl.primera++;
         }
     }
-    fillResumen(tablaResumen);
+    fillResumen(index,true);
 }
 
-function fillResumen(resumen){ //RESOLVER PROBLEMA PARA CALCULAR CAPITAL INVERTIDO, CALCULAR MONTO INVERTIDO, REFACTORIZAR FUNCIONES.
+function fillResumen(index = 1, restar = false){ //RESOLVER PROBLEMA PARA CALCULAR CAPITAL INVERTIDO, CALCULAR MONTO INVERTIDO, REFACTORIZAR FUNCIONES.
+    let resumen = document.getElementById('tablaResumen');
+    let indexRow = index;
+    let control = restar;
     variablesControl.ultima = 1;
     variablesControl.segunda = 2;
     variablesControl.primera = 3; /// ESTAS VARIABLES CONTROLAN EL FLUJO DE MOVIMIENTO ENTRE LAS 3 TABLAS EN LOS CICLOS.
     let indexTablaCapital = 1;
-    let celda1;
-    let celda2;
-    let celda3;
-    let gananciaDinamica;
-    let capitalDinamico;
+    let celda1 = 0;
+    let celda2 = 0;
+    let celda3 = 0;
+    let gananciaDinamica = 0;
+    let capitalDinamico = 0;
     let montoTotal;
-    for(let indexRow = 1; indexRow < 11; indexRow++){
-        if(indexRow == 0){
-            resumen.rows[indexRow].cells[2].textContent = getElementContent(1,1,3);// RELLENA GANANCIA HASTA LA FECHA
-            resumen.rows[indexRow].cells[4].textContent = getElementContent(1,1,3);// RELLENA MONTO TOTAL LIBERADO
-        }
+    resumen.rows[0].cells[1].textContent = getElementContent(1,0,1);
+    for(indexRow; indexRow < 11; indexRow++){
         if(indexRow == 1){
             celda1 = getElementContent(1,0,1);
             celda2 = getElementContent(2,0,1);
@@ -269,14 +302,18 @@ function fillResumen(resumen){ //RESOLVER PROBLEMA PARA CALCULAR CAPITAL INVERTI
             celda2 = getElementContent(2,0,3);
             gananciaDinamica = formatNodeToFloat(celda1) + formatNodeToFloat (celda2);
             resumen.rows[indexRow].cells[2].textContent = gananciaDinamica.toLocaleString(); // RELLENA GANANCIA HASTA LA FECHA
-            celda1 = resumen.rows[indexRow].cells[2].textContent;
+            celda1 = getElementContent(2,0,1);
             celda2 = resumen.rows[indexRow].cells[3].textContent;
             montoTotal = formatNodeToFloat(celda1) + formatNodeToFloat(celda2);
             resumen.rows[indexRow].cells[4].textContent = montoTotal.toLocaleString();
             resumen.rows[indexRow].cells[6].textContent = montoTotal.toLocaleString(); // RELLENA MONTO TOTAL LIBERADO
             
             
-        }else{
+        } if(indexRow >1) {
+            if(control === true){
+                variablesControl = reiniciarVariables(variablesControl,indexRow);
+                control = false;
+            }
             celda1 = getElementContent(variablesControl.ultima,0,1);
             celda2 = getElementContent(variablesControl.segunda,0,1);
             celda3 = getElementContent(variablesControl.primera,0,1);
@@ -306,19 +343,11 @@ function fillResumen(resumen){ //RESOLVER PROBLEMA PARA CALCULAR CAPITAL INVERTI
     }
 }
 
-
-
-
-    // TOMAR VALORES DEL DOM let indexRow = tablaResumen.rows[0].cells[1].textContent;
-    // FORMATEAR DEL DOM A NUMEROS FLOTANTES PARA CALCULOSlet rr = formatNodeToFloat(indexRow);
-
-
-
-
-
-
-
-
+    function recalculo(){
+        if( fechaString != []){
+            fillTables();
+        }
+    }
 
     function getPorcentaje(num) {
         let porcentaje = (num <=10000.00) ? 50 :(
@@ -347,17 +376,27 @@ function fillResumen(resumen){ //RESOLVER PROBLEMA PARA CALCULAR CAPITAL INVERTI
     function getElementContent(id,row,cell){
         return document.getElementById(`table${id}`).rows[row].cells[cell].textContent;
     }
-//ELEMENTOS CON NODOS
-/*function readTables(divTablas){
-    var tableN = divTablas.firstElementChild;
-    if(divTablas.hasChildNodes()){
-        console.log(`Hola, este div tiene ${divTablas.childElementCount}`);
-        for( let i = 0; i < divTablas.childElementCount; i++){
-            console.log(tableN);
-            if( i == 5 ){
-            console.log(tableN.rows)
+
+    function reiniciarTabla(id){
+        let tabla = document.getElementById('div-tables').firstElementChild;
+        for (let i = 0; i <= document.getElementById('div-tables').childElementCount; i++){
+            if( tabla.id == `table${id}`){
+                return tabla;
+            }else{
+                tabla = tabla.nextSibling;
             }
-            tableN = tableN.nextSibling;
         }
     }
-}*/
+
+    function reiniciarVariables(varControl,indexTabla = 3){
+        if(indexTabla <3){
+            varControl.ultima = 1;
+            varControl.segunda = 2;
+            varControl.primera = 3;
+            return varControl;
+        }
+        varControl.ultima = indexTabla - 2;
+        varControl.segunda = indexTabla -1;
+        varControl.primera = indexTabla;
+        return varControl;
+    }
