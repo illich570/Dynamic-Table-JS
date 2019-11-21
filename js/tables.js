@@ -10,21 +10,37 @@ var variablesControl = {
 };
 var first = true;
 
-function testex(){
+function generarTabla(){
     if(first == true){  
     getFechas();
-    DibujarTablaResumen();
-    DibujarTablas();
-    RellenarCeldaFechas();
-    fillTables();
+    dibujarTablaResumen();
+    dibujarTablas();
+    rellenarCeldasFechas();
+    rellenarTablas();
     first = false;
     }else{
         fechaString = [];
         fechasDate = [];
         getFechas();
-        RellenarCeldaFechas();
+        rellenarCeldasFechas();
     }
 }
+
+    function recalculo(){
+        if( fechaString != []){
+            rellenarTablas();
+            reiniciarInput();
+        }
+    }
+
+    function reiniciarInput(){
+        for(let i = 1; i <= 11; i++){
+            let prueba = document.getElementById(i);
+            prueba.value = '';
+        }
+        
+    }
+
 function retiroResumen(id){
     if( document.getElementById(id).value != 0){
         let resumen = document.getElementById('tablaResumen');
@@ -37,11 +53,11 @@ function retiroResumen(id){
         celda2 = formatNodeToFloat(resumen.rows[id - 1].cells[1].textContent);
         let capitalInvertido = celda2 - celda1;
         resumen.rows[id - 1].cells[1].textContent = capitalInvertido.toLocaleString();
-        fillTables(id,montoInvertido,true);
+        rellenarTablas(id,montoInvertido,true);
     }
 }
 
-function DibujarTablas(){
+function dibujarTablas(){
     let titleTables = ['Fecha', 'Capital Inv.', '%', 'Monto ganar', 'Ganancia', 'Capital', 'Monto'];
     let divParent = document.getElementById("div-tables");
     let idAtributoTabla= 1;
@@ -92,7 +108,7 @@ function getFechas() {
     console.log(fechaString);
 }
 
-function DibujarTablaResumen() {
+function dibujarTablaResumen() {
     var indexInput = 0;
     let divTablaResumen = document.getElementById("div-resume");
     let titulosTResumen = ['Fecha','Capital Inv.','Ganancia T. H. la fecha','Capital T. H. la fecha','Monto T. liberado','Monto Ret.','Plazo','Monto Inv.'];
@@ -134,7 +150,7 @@ function DibujarTablaResumen() {
 }
 
 
-function RellenarCeldaFechas(){
+function rellenarCeldasFechas(){
     let resumen = document.getElementById("tablaResumen");
     for( let i = 0; i <= 10; i++){
         let celda = resumen.rows[i].cells[0];
@@ -157,7 +173,7 @@ function rellenarFechasTablas(divTablas){
     }
 }
 
-function fillTables(index = 0, capitalModificado = 0, restar = false){
+function rellenarTablas(index = 0, capitalModificado = 0, restar = false){
     let indexTabla;
     index == 0 ?  indexTabla = 0 : indexTabla = index -1;
     variablesControl.ultima = 1;
@@ -343,11 +359,6 @@ function fillResumen(index = 1, restar = false){ //RESOLVER PROBLEMA PARA CALCUL
     }
 }
 
-    function recalculo(){
-        if( fechaString != []){
-            fillTables();
-        }
-    }
 
     function getPorcentaje(num) {
         let porcentaje = (num <=10000.00) ? 50 :(
