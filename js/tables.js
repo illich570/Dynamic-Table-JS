@@ -22,7 +22,7 @@ function testex(){
         fechaString = [];
         fechasDate = [];
         getFechas();
-        RellenarCeldaFechas()
+        RellenarCeldaFechas();
     }
 }
 function retiroResumen(id){

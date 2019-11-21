@@ -2,11 +2,18 @@
 input{
     background: wheat;
     text-align: center;
-}
-nav {
-    display: none;
-    position: absolute;
-    top: 430px;
-    left: 1100px;
+    border-color:transparent;
+    margin-top: 10px;
 }
 
+#div-resume{
+    width: 60%;
+    float: left;
+}
+thead{
+    font-size: 0.95em;
+}
+#div-tables{
+    width: 38%;
+    float: right;
+}
