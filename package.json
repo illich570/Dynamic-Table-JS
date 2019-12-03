@@ -1,14 +1,22 @@
 {
-  "name": "test",
+  "name": "tabla",
   "version": "1.0.0",
   "description": "",
-  "main": "hola.js",
+  "main": "tables.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/illich570/Dynamic-Table-JS.git"
+  },
   "author": "",
   "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/illich570/Dynamic-Table-JS/issues"
+  },
+  "homepage": "https://github.com/illich570/Dynamic-Table-JS#readme",
   "devDependencies": {
-    "eslint": "^6.3.0"
+    "eslint": "^6.7.2"
   }
 }
