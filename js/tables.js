@@ -1,8 +1,8 @@
 
 var fechasDate = [];
 var fechaString = [];
-var columnas = 5;
-var totalRows= 5;
+var columnas = 7;
+var totalRows= 4;
 var variablesControl = {
     ultima: 1,
     segunda: 2,
@@ -58,18 +58,18 @@ function retiroResumen(id){
 }
 
 function dibujarTablas(){
-    let titleTables = ['Fecha', 'Capital Inv.', '%', 'Monto ganar', 'Monto Ganado'];
+    let titleTables = ['Fecha', 'Capital Inv.', '%', 'Monto ganar', 'Ganancia', 'Capital', 'Monto'];
     let divParent = document.getElementById("div-tables");
     let idAtributoTabla= 1;
-    let div = divParent;
+    var div = divParent;
     for( let tbl = 0; tbl < 11; tbl++){
         let table = document.createElement("table");
-        //table.setAttribute("class","table table-bordered table-dark mt-5");
+        table.setAttribute("class","table table-bordered table-dark mt-5");
         table.setAttribute("id",`table${idAtributoTabla}`);
-        for (let indexRow = 0; indexRow < totalRows ; indexRow++) {
+        for (let indexRow = 0; indexRow < totalRows+1 ; indexRow++) {
             if( indexRow== 0){
                 let head = document.createElement("thead");
-                for( let rHead = 0; rHead < 5; rHead++){
+                for( let rHead = 0; rHead < 7; rHead++){
                     let th = document.createElement('th');
                     let thText= document.createTextNode(titleTables[rHead]);
                     th.appendChild(thText);
@@ -109,11 +109,11 @@ function getFechas() {
 }
 
 function dibujarTablaResumen() {
-    let indexInput = 0;
+    var indexInput = 0;
     let divTablaResumen = document.getElementById("div-resume");
-    let titulosTResumen = ['Fecha','Capital Inv.','Ganancia H. la fecha','Capital Activo','Monto Total H. la fecha','Monto Ret.','Plazo','Monto Inv.'];
+    let titulosTResumen = ['Fecha','Capital Inv.','Ganancia T. H. la fecha','Capital T. H. la fecha','Monto T. liberado','Monto Ret.','Plazo','Monto Inv.'];
     let tablaResumen = document.createElement('table');
-    //tablaResumen.setAttribute('class','table table-bordered table-dark mt-5');
+    tablaResumen.setAttribute('class','table table-bordered table-dark mt-5');
     tablaResumen.setAttribute('id','tablaResumen');
     for( let indexRow = 0; indexRow < 12; indexRow++){
         
@@ -128,7 +128,7 @@ function dibujarTablaResumen() {
             divTablaResumen.appendChild(tablaResumen);
         }else{
             let row = document.createElement("tr");
-            for(let celda = 0; celda <= 7; celda++ ){
+            for(let celda = 0; celda <= columnas; celda++ ){
                 if(celda != 5){
                 let cell = document.createElement("td");
                 cell.textContent = '0,00';
@@ -204,11 +204,11 @@ function rellenarTablas(index = 0, capitalModificado = 0, restar = false){
             indexRow ==3 ? ultimaGanancia = gananciaDinamica : false; //Atajar el ultimo valor que se calcula para sumar al final del ciclo
             tablas.rows[indexRow].cells[2].textContent = porcentaje + '%';
             tablas.rows[indexRow].cells[3].textContent = gananciaDinamica.toLocaleString();//INSSERTA LA GANANCIA EN LAS FILAS
-            tablas.rows[indexRow].cells[4].textContent = gananciaDinamica.toLocaleString();// INSERTA LA GANANCIA EN LA COLUMNA MONTO TOTAL
+            tablas.rows[indexRow].cells[6].textContent = gananciaDinamica.toLocaleString();// INSERTA LA GANANCIA EN LA COLUMNA MONTO TOTAL
             porcentaje = porcentaje + 2;
             }
             montoTotal = inputcapital + ultimaGanancia;
-            tablas.rows[3].cells[4].textContent = montoTotal.toLocaleString();
+            tablas.rows[3].cells[6].textContent = montoTotal.toLocaleString();
             porcentaje = getElementContent(1,1,3);
         }
         if( indexTabla == 1){
@@ -228,12 +228,12 @@ function rellenarTablas(index = 0, capitalModificado = 0, restar = false){
                 gananciaDinamica = getGanancia(capitalDinamico,porcentaje);
                 tablas.rows[indexRow].cells[2].textContent = porcentaje + '%'; // CALCULA LA GANANCIA CON EL CAPITAL Y EL POCENTAJE QUE AUMENTA DE 2% CADA CICLO
                 tablas.rows[indexRow].cells[3].textContent = gananciaDinamica.toLocaleString();//INSSERTA LA GANANCIA EN LAS FILAS
-                tablas.rows[indexRow].cells[4].textContent = gananciaDinamica.toLocaleString();//inserta la ganancia en la columna monto total
+                tablas.rows[indexRow].cells[6].textContent = gananciaDinamica.toLocaleString();//inserta la ganancia en la columna monto total
                 porcentaje = porcentaje + 2;
                 indexRow == 3 ? ultimaGanancia = gananciaDinamica : false; //Atajar el ultimo valor
             }
             montoTotal = capitalDinamico + ultimaGanancia;
-            tablas.rows[3].cells[4].textContent = montoTotal.toLocaleString(); // Rellena el Ultimo monto en Monto montoTotal
+            tablas.rows[3].cells[6].textContent = montoTotal.toLocaleString(); // Rellena el Ultimo monto en Monto montoTotal
         }
         if(indexTabla == 2){
             tablas = reiniciarTabla(indexTabla + 1);
@@ -254,15 +254,15 @@ function rellenarTablas(index = 0, capitalModificado = 0, restar = false){
                 tablas.rows[indexRow].cells[2].textContent = porcentaje + '%';
                 tablas.rows[indexRow].cells[3].textContent = gananciaDinamica.toLocaleString();//INSSERTA LA GANANCIA EN LAS FILAS
                 indexRow == 3 ? ultimaGanancia = gananciaDinamica : false;//Atajar el ultimo valor
-                tablas.rows[indexRow].cells[4].textContent = gananciaDinamica.toLocaleString();//INSSERTA LA GANANCIA EN LA COLUMNA MONTO TOTAL
+                tablas.rows[indexRow].cells[6].textContent = gananciaDinamica.toLocaleString();//INSSERTA LA GANANCIA EN LA COLUMNA MONTO TOTAL
                 porcentaje += 2;
             }
             montoTotal = capitalDinamico + ultimaGanancia;
-            tablas.rows[3].cells[4].textContent = montoTotal.toLocaleString();// Rellena el Ultimo monto en Monto montoTotal
+            tablas.rows[3].cells[6].textContent = montoTotal.toLocaleString();// Rellena el Ultimo monto en Monto montoTotal
         }
         if(indexTabla >2) {
             tablas = reiniciarTabla(indexTabla + 1);
-            celda1 = getElementContent(variablesControl.ultima,3,4);
+            celda1 = getElementContent(variablesControl.ultima,3,6);
             celda2 = getElementContent(variablesControl.segunda,2,3);
             celda3 = getElementContent(variablesControl.primera,1,3);
             capitalDinamico = formatNodeToFloat(celda1) + formatNodeToFloat(celda2)+ formatNodeToFloat(celda3);
@@ -281,10 +281,10 @@ function rellenarTablas(index = 0, capitalModificado = 0, restar = false){
                 tablas.rows[indexRow].cells[3].textContent = gananciaDinamica.toLocaleString();//INSSERTA LA GANANCIA EN LAS FILAS
                 porcentaje = porcentaje + 2;
                 indexRow == 3 ? ultimaGanancia = gananciaDinamica : false;
-                tablas.rows[indexRow].cells[4].textContent = gananciaDinamica.toLocaleString();//INSSERTA LA GANANCIA EN LA COLUMNA MONTO TOTAL
+                tablas.rows[indexRow].cells[6].textContent = gananciaDinamica.toLocaleString();//INSSERTA LA GANANCIA EN LA COLUMNA MONTO TOTAL
             }
             montoTotal = capitalDinamico + ultimaGanancia;
-            tablas.rows[3].cells[4].textContent = montoTotal.toLocaleString();
+            tablas.rows[3].cells[6].textContent = montoTotal.toLocaleString();
             variablesControl.ultima++;
             variablesControl.segunda++;
             variablesControl.primera++;
@@ -411,21 +411,3 @@ function fillResumen(index = 1, restar = false){ //RESOLVER PROBLEMA PARA CALCUL
         varControl.primera = indexTabla;
         return varControl;
     }
-
-
-    /* MIERDA DE CODIGO PARA FORMATEAR NUMEROS
-    window.onload = function(){
-        var input = document.getElementById('hola');
-        input.addEventListener('blur',function(){
-            let value = input.value;
-            value = parseFloat(input.value.replace(/[.,]+/g,""));
-            let res  = input.value.split(".");
-            if(res.length == 1 || (res[1].length < 3)){
-                value = value.toFixed(2);
-                value = Number(value);
-                
-            }
-            input.value = value.toLocaleString();
-        } );
-    }
-    */

@@ -3,23 +3,32 @@
   <head>
     <title>HOLA</title>
     <meta charset="utf-8">
-    <link rel="stylesheet" href="./css/main.css">
-    <script  src="./js/tables.js"></script>
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/main.css">
+    
   </head>
 
   <body>
-      <h1>Proyeccion financiera HNG</h1>
+      <h1 class="text-center">Proyeccion financiera HNG</h1>
       <div class="container">
-        <input id="inversion" class="loco" type="number" step="0.01"  onblur="recalculo()" placeholder="Coloque monto de Capital">
-        <input id="fecha" type="date" onblur="generarTabla()" placeholder="mete la fecha aqui guevon">
-      </div>
+        <form>
+          <div class="form-row">
+              <div class="col">
+                  <input  id="inversion" type="number" step="0.01" class="form-control" onblur="recalculo()" placeholder="Coloque monto de Capital">
+              </div>
+              <div class="col">
+                  <input id="fecha" type="date" class="form-control" onblur="generarTabla()" placeholder="mete la fecha aqui guevon">
+              </div>
+          </div>
+          </div>
+        </form>
       </div>
       <div id="div-resume">
       </div>
         <div id="div-tables">
         </div>
-        <div id="prueba">
-          <input id="hola" type="number" placeholder="hola">
-        </div>
+      <script  src="./js/jq.min.js"></script>
+      <script src="/js/popper.min.js"></script>
+      <script  src="./js/tables.js"></script>
   </body>
 </html>
