@@ -64,7 +64,7 @@ function dibujarTablas(){
     var div = divParent;
     for( let tbl = 0; tbl < 11; tbl++){
         let table = document.createElement("table");
-        table.setAttribute("class","table table-bordered table-dark mt-5");
+        //table.setAttribute("class","table table-bordered table-dark mt-5");
         table.setAttribute("id",`table${idAtributoTabla}`);
         for (let indexRow = 0; indexRow < totalRows+1 ; indexRow++) {
             if( indexRow== 0){
@@ -113,7 +113,7 @@ function dibujarTablaResumen() {
     let divTablaResumen = document.getElementById("div-resume");
     let titulosTResumen = ['Fecha','Capital Inv.','Ganancia T. H. la fecha','Capital T. H. la fecha','Monto T. liberado','Monto Ret.','Plazo','Monto Inv.'];
     let tablaResumen = document.createElement('table');
-    tablaResumen.setAttribute('class','table table-bordered table-dark mt-5');
+    //tablaResumen.setAttribute('class','table table-bordered table-dark mt-5');
     tablaResumen.setAttribute('id','tablaResumen');
     for( let indexRow = 0; indexRow < 12; indexRow++){
         
@@ -411,3 +411,21 @@ function fillResumen(index = 1, restar = false){ //RESOLVER PROBLEMA PARA CALCUL
         varControl.primera = indexTabla;
         return varControl;
     }
+
+
+    /* MIERDA DE CODIGO PARA FORMATEAR NUMEROS
+    window.onload = function(){
+        var input = document.getElementById('hola');
+        input.addEventListener('blur',function(){
+            let value = input.value;
+            value = parseFloat(input.value.replace(/[.,]+/g,""));
+            let res  = input.value.split(".");
+            if(res.length == 1 || (res[1].length < 3)){
+                value = value.toFixed(2);
+                value = Number(value);
+                
+            }
+            input.value = value.toLocaleString();
+        } );
+    }
+    */
