@@ -1,9 +1,25 @@
-
+h1{
+    text-align: center;
+}
+.container{
+    text-align: center;
+    padding-bottom: 20px;
+}
+table,td,th{
+    border: 1px solid black;
+    border-collapse: collapse;
+    text-align: end;
+}
+th{
+    text-align: center;
+}
 input{
     background: wheat;
+    height: 21px;
     text-align: center;
-    border-color:transparent;
-    margin-top: 10px;
+    border-color: transparent;
+    border:  2px solid gray;
+    margin: 0px;
 }
 
 #div-resume{
@@ -16,4 +32,7 @@ thead{
 #div-tables{
     width: 38%;
     float: right;
+}
+#div-tables > table{
+    margin-bottom: 10px;
 }
