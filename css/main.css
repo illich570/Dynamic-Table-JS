@@ -37,3 +37,12 @@ thead{
 #div-tables > table{
     margin-bottom: 10px;
 }
+
+#botones{
+display: flex;
+}
+
+.pagination{
+    display: flex;
+    padding: 0;
+}

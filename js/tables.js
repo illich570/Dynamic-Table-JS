@@ -2,13 +2,24 @@
 var fechasDate = [];
 var fechaString = [];
 var columnas = 5;
-var totalRows= 4;
+var totalRows= 11;
 var variablesControl = {
     ultima: 1,
     segunda: 2,
     primera: 3,
 };
 var first = true;
+
+function creacionDeSelect(){
+    let l = document.createElement('select');
+    let r = document.createElement('option');
+    r.value = 105;
+    l.appendChild(r);
+    let j = document.getElementById('container');
+    j.appendChild(l);
+}
+const test= (pam) => console.log(`hola soy ${pam}`);
+
 
 function generarTabla(){ //Funcion principal que se llama desde el HTML 
     if(first == true){ //Verifica si es primera vez que se ejecuta
@@ -18,6 +29,7 @@ function generarTabla(){ //Funcion principal que se llama desde el HTML
     rellenarCeldasFechas();//Rellena las celdas de las fechas en todas las tablas
     rellenarTablas();// Rellena las celdas de calculos de todas las tablas
     first = false;
+    creacionDeSelect();
     }else{
         fechaString = [];
         fechasDate = [];
