@@ -10,15 +10,27 @@ var variablesControl = {
 };
 var first = true;
 
-function creacionDeSelect(){
-    let l = document.createElement('select');
-    let r = document.createElement('option');
-    r.value = 105;
-    l.appendChild(r);
-    let j = document.getElementById('container');
-    j.appendChild(l);
+const createSelect = () =>{
+    let select = document.createElement('select');
+    let dias = 35
+    for(let plazos = 1; plazos <=11;plazos++){
+        let option = document.createElement('option');
+        option.text = dias;
+        option.value = plazos;
+        select.appendChild(option);
+        dias += 35;
+    }
+    return select;
 }
-const test= (pam) => console.log(`hola soy ${pam}`);
+
+const createInput= indexInput => {
+    let input = document.createElement("input");
+    input.setAttribute("id",`${indexInput}`);
+    input.setAttribute('placeholder',"0,00");
+    input.setAttribute('style','width: 120px;');
+    input.setAttribute('onblur',`retiroResumen(${indexInput})`);
+    return input;
+}
 
 
 function generarTabla(){ //Funcion principal que se llama desde el HTML 
@@ -29,7 +41,8 @@ function generarTabla(){ //Funcion principal que se llama desde el HTML
     rellenarCeldasFechas();//Rellena las celdas de las fechas en todas las tablas
     rellenarTablas();// Rellena las celdas de calculos de todas las tablas
     first = false;
-    creacionDeSelect();
+    createSelect();
+    putSelect();
     }else{
         fechaString = [];
         fechasDate = [];
@@ -136,19 +149,18 @@ function dibujarTablaResumen() {
         }else{
             let row = document.createElement("tr");
             for(let celda = 0; celda <= 7; celda++ ){//Ciclo que genera celdas en las filas
-                if(celda != 5){
-                let cell = document.createElement("td");
-                cell.textContent = '0,00';
-                row.appendChild(cell);
-                }else{
-                    let input = document.createElement("input");
-                    input.setAttribute("id",`${indexInput}`);
-                    input.setAttribute('placeholder',"0,00");
-                    input.setAttribute('style','width: 120px;');
-                    input.setAttribute('onblur',`retiroResumen(${indexInput})`);
+                if(celda == 5){
+                    let input = createInput(indexInput);
                     row.appendChild(input);
-                    
+                    }else{
+                    let cell = document.createElement("td");
+                    cell.textContent = '0,00';
+                    if(celda == 6){
+                    cell.setAttribute('class', "select");
+                    }
+                    row.appendChild(cell);
                 }
+                    //COLOCAR CLASES A LA COLUMNA PLAZO Y DESPUES RECORRERLAS CON EL DOM Y USAR EL .REPLACEWITH
             }
                 tablaResumen.appendChild(row);
         }
@@ -156,6 +168,7 @@ function dibujarTablaResumen() {
     }
 }
 
+//let select = createSelect();
 
 function rellenarCeldasFechas(){//Rellena las fechas de todas la tabla resumen
     let resumen = document.getElementById("tablaResumen");
@@ -365,7 +378,7 @@ function fillResumen(index = 1, restar = false){ //Rellena la tabla resumen
             variablesControl.primera++;
             
         }
-        resumen.rows[indexRow].cells[5].textContent = '105'; //ESTO RELLENA EL ESPACIO DE PLAZO
+        //resumen.rows[indexRow].cells[5]. = '105'; //ESTO RELLENA EL ESPACIO DE PLAZO
     }
 }
 
@@ -420,4 +433,12 @@ function fillResumen(index = 1, restar = false){ //Rellena la tabla resumen
         varControl.segunda = indexTabla -1;
         varControl.primera = indexTabla;
         return varControl;
+    }
+
+    function putSelect(){
+        let fila = document.getElementsByClassName('select');
+        for(let i = 0; i <= fila; i++){
+        let 
+        }
+        
     }
