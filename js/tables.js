@@ -1,4 +1,4 @@
-
+// Crear introduccion dinamica de las tablas a partir del cambio en el select de plazo, despues verificar de nuevo todos los calculos ya que estan erroneos.
 var fechasDate = [];
 var fechaString = [];
 var columnas = 5;
@@ -42,7 +42,6 @@ function generarTabla(){ //Funcion principal que se llama desde el HTML
     rellenarTablas();// Rellena las celdas de calculos de todas las tablas
     first = false;
     createSelect();
-    putSelect();
     }else{
         fechaString = [];
         fechasDate = [];
@@ -70,9 +69,9 @@ function retiroResumen(id){//Funcion que toma valor del input de retiro de resum
         let val = document.getElementById(id);
         let celda1 = formatNodeToFloat(val.value);
         val.value = celda1.toLocaleString();
-        let celda2 = formatNodeToFloat(resumen.rows[id -1].cells[6].textContent);
+        let celda2 = formatNodeToFloat(resumen.rows[id -1].cells[7].textContent);
         let montoInvertido = celda2 - celda1;
-        resumen.rows[id - 1].cells[6].textContent = montoInvertido.toLocaleString();
+        resumen.rows[id - 1].cells[7].textContent = montoInvertido.toLocaleString();
         celda2 = formatNodeToFloat(resumen.rows[id - 1].cells[1].textContent);
         let capitalInvertido = celda2 - celda1;
         resumen.rows[id - 1].cells[1].textContent = capitalInvertido.toLocaleString();
@@ -114,7 +113,7 @@ function dibujarTablas(){//Dibuja el esquema de las tablas pequeñas
 }
 
 function getFechas(){//Calcula las fechas adecuadas a partir de la fecha introducida
-    let plazos = 14;
+    let plazos = 22;
     let fecha = new Date(`${document.getElementById('fecha').value}`);
     fecha.setDate(fecha.getDate() + 1);
     fechasDate.push(fecha.getTime());//Introduce objetos de el arreglo de fechas
@@ -148,11 +147,18 @@ function dibujarTablaResumen() {
             divTablaResumen.appendChild(tablaResumen);
         }else{
             let row = document.createElement("tr");
-            for(let celda = 0; celda <= 7; celda++ ){//Ciclo que genera celdas en las filas
+            for(let celda = 0; celda < 7; celda++ ){//Ciclo que genera celdas en las filas
                 if(celda == 5){
+                    let cell = document.createElement("td"); 
                     let input = createInput(indexInput);
-                    row.appendChild(input);
-                    }else{
+                    cell.appendChild(input);
+                    row.appendChild(cell);
+                }if(celda == 5){
+                    let cell = document.createElement("td");
+                    let select = createSelect();
+                    cell.appendChild(select);
+                    row.appendChild(cell);    
+                }else{
                     let cell = document.createElement("td");
                     cell.textContent = '0,00';
                     if(celda == 6){
@@ -186,13 +192,13 @@ function rellenarFechasTablas(divTablas){//Rellena las fechas de todas las tabla
     let indexFecha = 0;
 
     for( let i = 0; i < divTablas.childElementCount; i++){//Ciclo que recorre por fila las tablas y coloca las fechas
-        for( let row = 0; row < 4; row++){
+        for( let row = 0; row < totalRows; row++){
             let celdaF = table.rows[row].cells[0];
             celdaF.textContent = fechaString[indexFecha];
             indexFecha++;
         }
         table = table.nextSibling;
-        indexFecha = indexFecha - 3;
+        indexFecha = indexFecha - 10;
     }
 
 }
@@ -222,7 +228,7 @@ function rellenarTablas(index = 0, capitalModificado = 0, restar = false){// Rel
             porcentaje = getPorcentaje(inputcapital);
             tablas.rows[0].cells[1].textContent = inputcapital.toLocaleString(); //Inserta la capital en la fila 0
             tablas.rows[0].cells[2].textContent = porcentaje + '%';  //Inserta el porcentaje en la fila 0
-            for(let indexRow = 1; indexRow < 4; indexRow++){
+            for(let indexRow = 1; indexRow < totalRows; indexRow++){
                 tablas.rows[indexRow].cells[1].textContent = inputcapital.toLocaleString();//Inserta la capital
             gananciaDinamica = getGanancia(inputcapital,porcentaje);// Calcula la ganancia con el capital  y el porcentaje que aumenta 2% cada ciclo
             indexRow ==3 ? ultimaGanancia = gananciaDinamica : false; //Atajar el ultimo valor que se calcula para sumar al final del ciclo
@@ -246,7 +252,7 @@ function rellenarTablas(index = 0, capitalModificado = 0, restar = false){// Rel
             porcentaje = getPorcentaje(capitalDinamico);
             tablas.rows[0].cells[1].textContent = capitalDinamico.toLocaleString();
             tablas.rows[0].cells[2].textContent = porcentaje + '%';
-            for(let indexRow = 1; indexRow < 4; indexRow++){
+            for(let indexRow = 1; indexRow < totalRows; indexRow++){
                 tablas.rows[indexRow].cells[1].textContent = capitalDinamico.toLocaleString();
                 gananciaDinamica = getGanancia(capitalDinamico,porcentaje);
                 tablas.rows[indexRow].cells[2].textContent = porcentaje + '%';
@@ -271,7 +277,7 @@ function rellenarTablas(index = 0, capitalModificado = 0, restar = false){// Rel
             porcentaje = getPorcentaje(capitalDinamico);
             tablas.rows[0].cells[1].textContent = capitalDinamico.toLocaleString();
             tablas.rows[0].cells[2].textContent = porcentaje + '%';
-            for(let indexRow = 1; indexRow < 4; indexRow++){
+            for(let indexRow = 1; indexRow < totalRows; indexRow++){
                 tablas.rows[indexRow].cells[1].textContent = capitalDinamico.toLocaleString();
                 gananciaDinamica = getGanancia(capitalDinamico,porcentaje);
                 tablas.rows[indexRow].cells[2].textContent = porcentaje + '%';
@@ -297,7 +303,7 @@ function rellenarTablas(index = 0, capitalModificado = 0, restar = false){// Rel
             porcentaje = getPorcentaje(capitalDinamico);
             tablas.rows[0].cells[1].textContent = capitalDinamico.toLocaleString();
             tablas.rows[0].cells[2].textContent = porcentaje + '%';
-            for(let indexRow = 1; indexRow < 4; indexRow++){
+            for(let indexRow = 1; indexRow < totalRows; indexRow++){
                 tablas.rows[indexRow].cells[1].textContent = capitalDinamico.toLocaleString();
                 gananciaDinamica = getGanancia(capitalDinamico,porcentaje);
                 tablas.rows[indexRow].cells[2].textContent = porcentaje + '%';
@@ -345,7 +351,7 @@ function fillResumen(index = 1, restar = false){ //Rellena la tabla resumen
             celda2 = resumen.rows[indexRow].cells[3].textContent;
             montoTotal = formatNodeToFloat(celda1) + formatNodeToFloat(celda2);
             resumen.rows[indexRow].cells[4].textContent = montoTotal.toLocaleString();
-            resumen.rows[indexRow].cells[6].textContent = montoTotal.toLocaleString(); // Rellena monto total
+            resumen.rows[indexRow].cells[7].textContent = montoTotal.toLocaleString(); // Rellena monto total
             
             
         } if(indexRow >1) {
@@ -372,7 +378,7 @@ function fillResumen(index = 1, restar = false){ //Rellena la tabla resumen
             celda2 = resumen.rows[indexRow].cells[3].textContent;
             montoTotal = formatNodeToFloat(celda1) + formatNodeToFloat(celda2);
             resumen.rows[indexRow].cells[4].textContent = montoTotal.toLocaleString();
-            resumen.rows[indexRow].cells[6].textContent = montoTotal.toLocaleString();
+            resumen.rows[indexRow].cells[7].textContent = montoTotal.toLocaleString();
             variablesControl.ultima++;
             variablesControl.segunda++;
             variablesControl.primera++;
@@ -435,10 +441,13 @@ function fillResumen(index = 1, restar = false){ //Rellena la tabla resumen
         return varControl;
     }
 
-    function putSelect(){
+/*    function putSelect(){
         let fila = document.getElementsByClassName('select');
-        for(let i = 0; i <= fila; i++){
-        let 
+        console.log(fila);
+        for(let i = 0; i < fila.length; i++){
+        let test = document.getElementsByClassName('select')[i];
+        test.innerHTML = '';
+        test.appendChild(createSelect());
         }
-        
-    }
+        console.log(document.getElementsByClassName('select'));
+    }*/
