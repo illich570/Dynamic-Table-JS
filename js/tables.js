@@ -2,7 +2,7 @@
 var fechasDate = [];
 var fechaString = [];
 var columnas = 5;
-var totalRows= 11;
+var totalRows= 4;
 var variablesControl = {
     ultima: 1,
     segunda: 2,
@@ -10,38 +10,15 @@ var variablesControl = {
 };
 var first = true;
 
-const createSelect = () =>{
-    let select = document.createElement('select');
-    let dias = 35
-    for(let plazos = 1; plazos <=11;plazos++){
-        let option = document.createElement('option');
-        option.text = dias;
-        option.value = plazos;
-        select.appendChild(option);
-        dias += 35;
-    }
-    return select;
-}
-
-const createInput= indexInput => {
-    let input = document.createElement("input");
-    input.setAttribute("id",`${indexInput}`);
-    input.setAttribute('placeholder',"0,00");
-    input.setAttribute('style','width: 120px;');
-    input.setAttribute('onblur',`retiroResumen(${indexInput})`);
-    return input;
-}
-
 
 function generarTabla(){ //Funcion principal que se llama desde el HTML 
     if(first == true){ //Verifica si es primera vez que se ejecuta
     getFechas();//Calcula la fecha  apartir de la fecha introducida
     dibujarTablaResumen();//Dibuja el esquema de la tabla resumen
     dibujarTablas();//Dibuja el esquema de las tablas pequeñas
-    rellenarCeldasFechas();//Rellena las celdas de las fechas en todas las tablas
-    rellenarTablas();// Rellena las celdas de calculos de todas las tablas
-    first = false;
-    createSelect();
+    //rellenarCeldasFechas();//Rellena las celdas de las fechas en todas las tablas
+    //rellenarTablas();// Rellena las celdas de calculos de todas las tablas
+    //first = false;
     }else{
         fechaString = [];
         fechasDate = [];
@@ -149,21 +126,30 @@ function dibujarTablaResumen() {
             let row = document.createElement("tr");
             for(let celda = 0; celda < 7; celda++ ){//Ciclo que genera celdas en las filas
                 if(celda == 5){
-                    let cell = document.createElement("td"); 
-                    let input = createInput(indexInput);
-                    cell.appendChild(input);
-                    row.appendChild(cell);
+                    if (indexRow == 1){
+                        let cell = document.createElement("td");
+                        cell.textContent = '0,00';
+                        row.appendChild(cell);    
+                    }else{
+                        let cell = document.createElement("td"); 
+                        let input = createInput(indexInput);
+                        cell.appendChild(input);
+                        row.appendChild(cell);
+                    }
                 }if(celda == 5){
-                    let cell = document.createElement("td");
-                    let select = createSelect();
-                    cell.appendChild(select);
-                    row.appendChild(cell);    
+                    if (indexRow == 1){
+                        let cell = document.createElement("td");
+                        cell.textContent = '0,00';
+                        row.appendChild(cell);    
+                    }else{
+                        let cell = document.createElement("td");
+                        let select = createSelect(indexInput);
+                        cell.appendChild(select);
+                        row.appendChild(cell);
+                    }    
                 }else{
                     let cell = document.createElement("td");
                     cell.textContent = '0,00';
-                    if(celda == 6){
-                    cell.setAttribute('class', "select");
-                    }
                     row.appendChild(cell);
                 }
                     //COLOCAR CLASES A LA COLUMNA PLAZO Y DESPUES RECORRERLAS CON EL DOM Y USAR EL .REPLACEWITH
@@ -405,41 +391,72 @@ function fillResumen(index = 1, restar = false){ //Rellena la tabla resumen
         return porcentaje;
     }
 
-    function formatNodeToFloat(num){//Transforma un nodo de texto a flotante
-        return parseFloat(num.replace(/\./g,'').replace(/,/,'.'));
-    }
+function formatNodeToFloat(num){//Transforma un nodo de texto a flotante
+    return parseFloat(num.replace(/\./g,'').replace(/,/,'.'));
+}
 
-    function getGanancia(num1,num2){//Calcula el procentaje con la capital y el porcentaje
-        return (num1 * num2)/100;
-    }
+function getGanancia(num1,num2){//Calcula el procentaje con la capital y el porcentaje
+    return (num1 * num2)/100;
+}
 
-    function getElementContent(id,row,cell){//Obtiene el elemento HTML a partir de su id, fila, celda.
-        return document.getElementById(`table${id}`).rows[row].cells[cell].textContent;
-    }
+function getElementContent(id,row,cell){//Obtiene el elemento HTML a partir de su id, fila, celda.
+    return document.getElementById(`table${id}`).rows[row].cells[cell].textContent;
+}
 
-    function reiniciarTabla(id){//Funcion para seleccionar la tabla a partir del id
-        let tabla = document.getElementById('div-tables').firstElementChild;
-        for (let i = 0; i <= document.getElementById('div-tables').childElementCount; i++){
-            if( tabla.id == `table${id}`){
-                return tabla;
-            }else{
-                tabla = tabla.nextSibling;
-            }
+function reiniciarTabla(id){//Funcion para seleccionar la tabla a partir del id
+    let tabla = document.getElementById('div-tables').firstElementChild;
+    for(let i = 0; i <= document.getElementById('div-tables').childElementCount; i++){
+        if( tabla.id == `table${id}`){
+            return tabla;
+        }else{
+            tabla = tabla.nextSibling;
         }
     }
+}
 
-    function reiniciarVariables(varControl,indexTabla = 3){//Reinicia las variables de control
-        if(indexTabla <3){
-            varControl.ultima = 1;
-            varControl.segunda = 2;
-            varControl.primera = 3;
-            return varControl;
-        }
-        varControl.ultima = indexTabla - 2;
-        varControl.segunda = indexTabla -1;
-        varControl.primera = indexTabla;
+function reiniciarVariables(varControl,indexTabla = 3){//Reinicia las variables de control
+    if(indexTabla <3){
+        varControl.ultima = 1;
+        varControl.segunda = 2;
+        varControl.primera = 3;
         return varControl;
     }
+    varControl.ultima = indexTabla - 2;
+    varControl.segunda = indexTabla -1;
+    varControl.primera = indexTabla;
+    return varControl;
+}
+
+
+
+const createSelect = () =>{
+    let select = document.createElement('select');
+    select.setAttribute('onchange',`putSelect(this.value)`);
+    let dias = 35
+    for(let plazos = 1; plazos <=11;plazos++){
+        let option = document.createElement('option');
+        option.text = dias;
+        option.value = plazos;
+        select.appendChild(option);
+        dias += 35;
+    }
+    return select;
+}
+    
+const createInput= indexInput => {
+    let input = document.createElement("input");
+    input.setAttribute("id",`${indexInput}`);
+    input.setAttribute('placeholder',"0,00");
+    input.setAttribute('style','width: 120px;');
+    input.setAttribute('onblur',`retiroResumen(${indexInput})`);
+    return input;
+    }
+
+function putSelect(e){
+    console.log(e);
+}
+
+
 
 /*    function putSelect(){
         let fila = document.getElementsByClassName('select');
@@ -451,3 +468,5 @@ function fillResumen(index = 1, restar = false){ //Rellena la tabla resumen
         }
         console.log(document.getElementsByClassName('select'));
     }*/
+    
+    
