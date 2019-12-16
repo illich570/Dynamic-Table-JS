@@ -56,15 +56,16 @@ function retiroResumen(id){//Funcion que toma valor del input de retiro de resum
     }
 }
 
-function dibujarTablas(){//Dibuja el esquema de las tablas pequeñas
+function dibujarTablas(tabla = 0, rows = totalRows){//Dibuja el esquema de las tabla pequeñas
     let titleTables = ['Fecha', 'Capital Inv.', '%', 'Monto ganar', 'Monto Ganado'];
     let divParent = document.getElementById("div-tables");
-    let idAtributoTabla= 1;
+    let idAtributoTabla= tabla + 1;
     var div = divParent;
-    for( let tbl = 0; tbl < 11; tbl++){//Ciclo que cuenta las tablas 
+    console.log(tabla,rows);
+    for(tabla; tabla < 11; tabla++){//Ciclo que cuenta las tablas 
         let table = document.createElement("table");
         table.setAttribute("id",`table${idAtributoTabla}`);
-        for (let indexRow = 0; indexRow <= totalRows ; indexRow++){//Ciclo que cuenta las filas
+        for (let indexRow = 0; indexRow <= rows ; indexRow++){//Ciclo que cuenta las filas
             if( indexRow== 0){//Si es la fila 0, Coloca los titulos
                 let head = document.createElement("thead");
                 for( let rHead = 0; rHead < 5; rHead++){
@@ -426,7 +427,7 @@ function reiniciarVariables(varControl,indexTabla = 3){//Reinicia las variables 
 const createSelect = indexInput => {
     let select = document.createElement('select');
     select.setAttribute('class','selectPlazos');
-    select.setAttribute('onchange',`putSelect(this,${indexInput})`);
+    select.setAttribute('onchange',`putSelect(this.value,${indexInput})`);
     let dias = 35
     for(let plazos = 1; plazos <=11;plazos++){
         let option = document.createElement('option');
@@ -435,6 +436,7 @@ const createSelect = indexInput => {
         select.appendChild(option);
         dias += 35;
     }
+    select.selectedIndex = 2;
     return select;
 }
     
@@ -448,9 +450,14 @@ const createInput= indexInput => {
     }
 
 function putSelect(e,index){
-    let removeTable = document.getElementById(`table${index}`);
+    let i = index;
+    for(i; i <= 11; i++){
+    let removeTable = document.getElementById(`table${i}`);
     let parentDiv = removeTable.parentElement;
     parentDiv.removeChild(removeTable);
+    }
+    console.log(index,e);
+    dibujarTablas(index- 1 ,e);
 }
 
 
