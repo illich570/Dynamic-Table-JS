@@ -137,16 +137,10 @@ function dibujarTablaResumen() {
                         row.appendChild(cell);
                     }
                 }if(celda == 5){
-                    if (indexRow == 1){
-                        let cell = document.createElement("td");
-                        cell.textContent = '0,00';
-                        row.appendChild(cell);    
-                    }else{
                         let cell = document.createElement("td");
                         let select = createSelect(indexInput);
                         cell.appendChild(select);
                         row.appendChild(cell);
-                    }    
                 }else{
                     let cell = document.createElement("td");
                     cell.textContent = '0,00';
@@ -429,9 +423,10 @@ function reiniciarVariables(varControl,indexTabla = 3){//Reinicia las variables 
 
 
 
-const createSelect = () =>{
+const createSelect = indexInput => {
     let select = document.createElement('select');
-    select.setAttribute('onchange',`putSelect(this.value)`);
+    select.setAttribute('class','selectPlazos');
+    select.setAttribute('onchange',`putSelect(this,${indexInput})`);
     let dias = 35
     for(let plazos = 1; plazos <=11;plazos++){
         let option = document.createElement('option');
@@ -452,8 +447,10 @@ const createInput= indexInput => {
     return input;
     }
 
-function putSelect(e){
-    console.log(e);
+function putSelect(e,index){
+    let removeTable = document.getElementById(`table${index}`);
+    let parentDiv = removeTable.parentElement;
+    parentDiv.removeChild(removeTable);
 }
 
 
