@@ -105,6 +105,7 @@ function getFechas(){//Calcula las fechas adecuadas a partir de la fecha introdu
     fechaString.push(fecha.toLocaleDateString());
     }
     console.log(fechaString);
+    console.log(fechasDate);
 }
 
 function dibujarTablaResumen() {
@@ -372,17 +373,17 @@ function fillResumen(index = 1, restar = false){ //Rellena la tabla resumen
 
     function getPorcentaje(num) {// Calcula el porcentaje de las ganancias a partir del monto
         let porcentaje = (num <=10000.00) ? 50 :(
-            (num>= 10000.00 && num<= 99999.99) ? 50 :(
-                (num>= 100000.00 && num<= 199999.99) ? 55 : (
-                    (num>= 200000.00 && num<= 499999.99 ? 60 : (
-                        (num>= 500000.00 && num<= 999999.99) ? 65 : (
-                            (num>= 1000000.00 && num<= 1999999.99) ? 70 : (
-                                (num >= 2000000.00 && num <= 4999999.99) ? 75 : (
-                                    (num >= 5000000.00 && num <= 9999999.99) ? 80 : (
-                                        (num >= 10000000.00 && num <= 49999999.99) ? 85 : (
-                                            (num >= 50000000.00 && num <= 99999999.99) ? 90 : (
-                                                (num >= 100000000.00 && num <= 199999999.99 ) ? 95 : (
-                                                    (num >= 200000000.00 && num <= 499999999.99) ? 100 : 120))))))))))))
+            (num>= 10000.00 && num<= 999999.99) ? 50 :(
+                (num>= 1000000.00 && num<= 1999999.99) ? 55 : (
+                    (num>= 2000000.00 && num<= 4999999.99 ? 60 : (
+                        (num>= 5000000.00 && num<= 9999999.99) ? 65 : (
+                            (num>= 10000000.00 && num<= 19999999.99) ? 70 : (
+                                (num >= 20000000.00 && num <= 49999999.99) ? 75 : (
+                                    (num >= 50000000.00 && num <= 99999999.99) ? 80 : (
+                                        (num >= 100000000.00 && num <= 499999999.99) ? 85 : (
+                                            (num >= 500000000.00 && num <= 99999999.99) ? 90 : (
+                                                (num >= 100000000.00 && num <= 4999999999.99 ) ? 95 : (
+                                                    (num >= 5000000000.00 && num <= 99999999999.99) ? 100 : 120))))))))))))
         return porcentaje;
     }
 
