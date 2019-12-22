@@ -11,7 +11,7 @@ var variablesControl = {
 var first = true;
 
 
-function generarTabla(){ //Funcion principal que se llama desde el HTML 
+function generarTabla(){ //Funcion principal que se llama desde el HTML
     if(first == true){ //Verifica si es primera vez que se ejecuta
     getFechas();//Calcula la fecha  apartir de la fecha introducida
     dibujarTablaResumen();//Dibuja el esquema de la tabla resumen
@@ -37,7 +37,7 @@ function generarTabla(){ //Funcion principal que se llama desde el HTML
             let prueba = document.getElementById(i);
             prueba.value = '';
         }
-        
+
     }
 
 function retiroResumen(id){//Funcion que toma valor del input de retiro de resumen y recalcula  las tablas a partir del monto retirado.
@@ -62,7 +62,7 @@ function dibujarTablas(tabla = 0, rows = totalRows){//Dibuja el esquema de las t
     let idAtributoTabla= tabla + 1;
     var div = divParent;
     console.log(tabla,rows);
-    for(tabla; tabla < 11; tabla++){//Ciclo que cuenta las tablas 
+    for(tabla; tabla < 11; tabla++){//Ciclo que cuenta las tablas
         let table = document.createElement("table");
         table.setAttribute("id",`table${idAtributoTabla}`);
         for (let indexRow = 0; indexRow <= rows ; indexRow++){//Ciclo que cuenta las filas
@@ -114,7 +114,7 @@ function dibujarTablaResumen() {
     let titulosTResumen = ['Fecha','Capital Inv.','Ganancia T. H. la fecha','Capital T. H. la fecha','Monto T. liberado','Monto Ret.','Plazo','Monto Inv.'];
     let tablaResumen = document.createElement('table');
     tablaResumen.setAttribute('id','tablaResumen');
-    for( let indexRow = 0; indexRow < 12; indexRow++){//Ciclo para contar las filas 
+    for( let indexRow = 0; indexRow < 12; indexRow++){//Ciclo para contar las filas
         if(indexRow == 0) {
             var head  = tablaResumen.createTHead();
             for( let rHead = 0; rHead <= 7; rHead++){
@@ -131,9 +131,9 @@ function dibujarTablaResumen() {
                     if (indexRow == 1){
                         let cell = document.createElement("td");
                         cell.textContent = '0,00';
-                        row.appendChild(cell);    
+                        row.appendChild(cell);
                     }else{
-                        let cell = document.createElement("td"); 
+                        let cell = document.createElement("td");
                         let input = createInput(indexInput);
                         cell.appendChild(input);
                         row.appendChild(cell);
@@ -241,10 +241,10 @@ function rellenarTablas(index = 0, capitalModificado = 0, restar = false){// Rel
                 tablas.rows[indexRow].cells[3].textContent = gananciaDinamica.toLocaleString();
                 tablas.rows[indexRow].cells[4].textContent = gananciaDinamica.toLocaleString();
                 porcentaje = porcentaje + 2;
-                indexRow == 3 ? ultimaGanancia = gananciaDinamica : false; 
+                indexRow == 3 ? ultimaGanancia = gananciaDinamica : false;
             }
             montoTotal = capitalDinamico + ultimaGanancia;
-            tablas.rows[3].cells[4].textContent = montoTotal.toLocaleString(); 
+            tablas.rows[3].cells[4].textContent = montoTotal.toLocaleString();
         }
         if(indexTabla == 2){//Equivale a la tabla 3
             tablas = reiniciarTabla(indexTabla + 1);
@@ -334,8 +334,8 @@ function fillResumen(index = 1, restar = false){ //Rellena la tabla resumen
             montoTotal = formatNodeToFloat(celda1) + formatNodeToFloat(celda2);
             resumen.rows[indexRow].cells[4].textContent = montoTotal.toLocaleString();
             resumen.rows[indexRow].cells[7].textContent = montoTotal.toLocaleString(); // Rellena monto total
-            
-            
+
+
         } if(indexRow >1) {
             if(control === true){
                 variablesControl = reiniciarVariables(variablesControl,indexRow);
@@ -353,7 +353,7 @@ function fillResumen(index = 1, restar = false){ //Rellena la tabla resumen
             celda1 = getElementContent(variablesControl.ultima,3,3);
             celda2 = getElementContent(variablesControl.segunda,2,3);
             celda3 = getElementContent(variablesControl.primera,1,3);
-            
+
             gananciaDinamica = formatNodeToFloat(celda1) + formatNodeToFloat(celda2) + formatNodeToFloat(celda3);
             resumen.rows[indexRow].cells[2].textContent = gananciaDinamica.toLocaleString();
             celda1 = resumen.rows[indexRow].cells[2].textContent;
@@ -364,7 +364,7 @@ function fillResumen(index = 1, restar = false){ //Rellena la tabla resumen
             variablesControl.ultima++;
             variablesControl.segunda++;
             variablesControl.primera++;
-            
+
         }
         //resumen.rows[indexRow].cells[5]. = '105'; //ESTO RELLENA EL ESPACIO DE PLAZO
     }
@@ -440,7 +440,7 @@ const createSelect = indexInput => {
     select.selectedIndex = 2;
     return select;
 }
-    
+
 const createInput= indexInput => {
     let input = document.createElement("input");
     input.setAttribute("id",`${indexInput}`);
@@ -461,6 +461,25 @@ function putSelect(e,index){
     dibujarTablas(index- 1 ,e);
 }
 
+function formattedChilean(value) {
+        let realVal = "";
+
+        value = value/parseInt(value) == 1 ? value.toLocaleString('es-ES') + ",00" : value.toLocaleString('es-ES');
+        value = value.split("");
+
+        for(let i = value.length; i > 0; i--){
+            if(i == 11){
+                value[(value.length - i)] = `'`;
+            }
+        }
+
+        for(let i = 0; i < value.length; i++){
+            realVal += value[i];
+        }
+
+        return realVal;
+    }
+
 
 
 /*    function putSelect(){
@@ -473,5 +492,3 @@ function putSelect(e,index){
         }
         console.log(document.getElementsByClassName('select'));
     }*/
-    
-    
